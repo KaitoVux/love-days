@@ -147,6 +147,7 @@ footer {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.26);
   border-radius: 26px;
   width: 100%;
+  border: 1px solid #ccc;
 }
 
 #song-name {
@@ -167,36 +168,46 @@ footer {
 @media (max-width: 992px) {
   #wrapper {
     grid-column: span 12;
-    grid-row-gap: 1rem;
+    grid-row-gap: 0.8em;
+    margin-top: 1rem;
   }
 
   h1 {
-    font-size: 6rem;
+    font-size: 5em;
   }
 
   #clock-box #clock {
     grid-column: 2 / 12;
-    padding: 0.8rem 1.6rem;
+    padding: 0.4rem 0.8rem;
   }
 
   date,
   time {
-    margin: 6px 0;
+    margin: 0.4rem 0;
     padding: 0;
+  }
+
+  date {
+    font-size: 2.4rem;
+  }
+
+  time {
+    font-size: 1.6rem;
   }
 
   .avt {
     width: 120px;
     height: 120px;
-    margin: 1.6rem 0;
+    margin: 1.6em 0;
   }
 
   #info {
-    margin-top: 2.6rem;
+    margin-top: 1.2rem;
   }
 
   p {
-    margin: 2rem 0;
+    margin: 1rem 0;
+    font-size: 2.8rem;
   }
 
   #info .one,
@@ -206,25 +217,37 @@ footer {
 
   #heart {
     grid-column: span 12;
-    padding-bottom: 2rem;
+    padding-bottom: 1.2rem;
   }
 
   .heart-icon {
-    margin: 2.5rem 0;
-    font-size: 5.5rem;
+    margin: 1.5rem 0;
+    font-size: 3.5rem;
   }
 
   anni {
     margin: 0 0;
+    font-size: 1.6rem;
   }
 
   #music {
-    grid-column: 2 / 3;
+    grid-column: 1 / 4;
+    margin: 0 4.4rem;
+  }
+
+  audio {
+    max-height: 40px;
+  }
+
+  #song-name {
+    text-align: center;
+    font-size: 1.8rem;
   }
 
   footer {
-    font-size: 3rem;
+    font-size: 2.6rem;
     margin-bottom: 3rem;
+    margin-top: 0;
   }
 }
 
