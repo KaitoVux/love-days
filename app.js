@@ -29,23 +29,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
       audio.onended = function () {
             let nextSong = music[Math.floor(Math.random() * music.length)];
+            if (isPlayed.length === music.length) {
+                  isPlayed = [];
+            }
             while (isPlayed.includes(nextSong) && isPlayed.length < music.length) {
                   nextSong = music[Math.floor(Math.random() * music.length)];
             }
-
-            if (isPlayed.length === music.length) {
-                  audio.pause();
-                  return;
-            }
-            else {
-                  audio.src = `music/${nextSong}.mp3`;
-                  audio.pause();
-                  audio.load();
-                  audio.play();
-                  songName = nextSong;
-                  document.getElementById("song-name").innerHTML = `${songName}`;
-                  isPlayed.push(nextSong);
-            }
+            audio.src = `music/${nextSong}.mp3`;
+            audio.pause();
+            audio.load();
+            audio.play();
+            songName = nextSong;
+            document.getElementById("song-name").innerHTML = `${songName}`;
+            isPlayed.push(nextSong);
 
       };
 
