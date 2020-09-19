@@ -1,5 +1,5 @@
 const yourDate = new Date("2020-08-22T00:00:00"),
-      music = ["I Do - 911", "The One - Kodaline", "All Of Me - John Legend", "Make You Feel My Love - Adele", "Wake Me Up When September Ends - Green D"];
+      music = ["I Do - 911", "The One - Kodaline", "All Of Me - John Legend", "Make You Feel My Love - Adele", "Wake Me Up When September Ends - Green D", "Can't Take My Eyes Off You", "Say You Won't Let Go - James Arthur"];
 let isPlayed = [];
 
 document.addEventListener('DOMContentLoaded', function () {
