@@ -153,6 +153,7 @@ footer {
 #song-name {
   text-align: center;
   font-size: 3.2rem;
+  line-height: 3.2rem;
 }
 
 #mask {
@@ -242,6 +243,7 @@ footer {
   #song-name {
     text-align: center;
     font-size: 1.8rem;
+    line-height: 1.8rem;
   }
 
   footer {

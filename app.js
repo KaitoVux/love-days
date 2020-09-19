@@ -1,5 +1,6 @@
 const yourDate = new Date("2020-08-22T00:00:00"),
-      music = ["I Do - 911", "The One - Kodaline"];
+      music = ["I Do - 911", "The One - Kodaline", "All Of Me - John Legend", "Make You Feel My Love - Adele", "Wake Me Up When September Ends - Green D"];
+let isPlayed = [];
 
 document.addEventListener('DOMContentLoaded', function () {
       var rootTime = document.querySelector("time");
@@ -17,10 +18,36 @@ document.addEventListener('DOMContentLoaded', function () {
       } olock();
       var timer = setInterval(function () { olock() }, 1000);
 
-      const songName = music[Math.floor(Math.random() * music.length)];
+      let songName = music[Math.floor(Math.random() * music.length)];
+      isPlayed.push(songName);
 
-      document.querySelector("audio").setAttribute("src", `music/${songName}.mp3`);
+      let audio = document.querySelector("audio");
+
+      audio.setAttribute("src", `music/${songName}.mp3`);
+
       document.getElementById("song-name").innerHTML = `${songName}`;
+
+      audio.onended = function () {
+            let nextSong = music[Math.floor(Math.random() * music.length)];
+            while (isPlayed.includes(nextSong) && isPlayed.length < music.length) {
+                  nextSong = music[Math.floor(Math.random() * music.length)];
+            }
+
+            if (isPlayed.length === music.length) {
+                  audio.pause();
+                  return;
+            }
+            else {
+                  audio.src = `music/${nextSong}.mp3`;
+                  audio.pause();
+                  audio.load();
+                  audio.play();
+                  songName = nextSong;
+                  document.getElementById("song-name").innerHTML = `${songName}`;
+                  isPlayed.push(nextSong);
+            }
+
+      };
 
       document.getElementsByTagName("body")[0].insertAdjacentHTML(
             "beforeend",
