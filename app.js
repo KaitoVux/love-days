@@ -1,18 +1,4 @@
-const yourDate = new Date("2020-08-22T00:00:00"),
-  music = [
-    "I Do - 911",
-    "The One - Kodaline",
-    "All Of Me - John Legend",
-    "Make You Feel My Love - Adele",
-    "Wake Me Up When September Ends - Green D",
-    "Can't Take My Eyes Off You",
-    "Say You Won't Let Go - James Arthur",
-    "Love Someone - Lukas Graham",
-    "Perfect - Ed Sheeran",
-    "What Makes You Beautiful - One Direction",
-    "Perfect - Cover by Tanner Patrick",
-  ];
-let isPlayed = [];
+const yourDate = new Date("2020-08-22T00:00:00");
 
 window.onload = function () {};
 
@@ -47,32 +33,6 @@ document.addEventListener(
     var timer = setInterval(function () {
       olock();
     }, 1000);
-
-    // random song
-    let songName = music[Math.floor(Math.random() * music.length)];
-    isPlayed.push(songName);
-
-    let audio = document.querySelector("audio");
-    audio.setAttribute("src", `music/${songName}.mp3`);
-
-    document.getElementById("song-name").innerHTML = `${songName}`;
-
-    audio.onended = function () {
-      let nextSong = music[Math.floor(Math.random() * music.length)];
-      if (isPlayed.length === music.length) {
-        isPlayed = [];
-      }
-      while (isPlayed.includes(nextSong) && isPlayed.length < music.length) {
-        nextSong = music[Math.floor(Math.random() * music.length)];
-      }
-      audio.src = `music/${nextSong}.mp3`;
-      audio.pause();
-      audio.load();
-      audio.play();
-      songName = nextSong;
-      document.getElementById("song-name").innerHTML = `${songName}`;
-      isPlayed.push(nextSong);
-    };
 
     document
       .getElementsByTagName("body")[0]
