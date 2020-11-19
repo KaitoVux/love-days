@@ -17,7 +17,13 @@ body {
   grid-template-columns: repeat(12, 1fr);
   grid-auto-rows: minmax(auto, auto);
   color: #3e3e3e;
+  height: 100vh;
   text-shadow: 0.4px 0.4px 0.4px rgba(207, 174, 174, 0.2);
+  background-image: linear-gradient(
+    to top,
+    rgba(143, 68, 204, 0.42) 0%,
+    rgba(240, 156, 216, 0.42) 100%
+  );
 }
 
 h1 {
@@ -142,6 +148,7 @@ footer {
   grid-column: span 4;
   text-align: center;
   font-size: 3.8rem;
+  margin-bottom: 20px;
 }
 
 #music {
@@ -163,16 +170,6 @@ footer {
   text-align: center;
   font-size: 3.2rem;
   line-height: 3.6rem;
-}
-
-#mask {
-  background-image: linear-gradient(to top, #6d44cc5d 0%, #f09cd880 100%);
-  opacity: 0.42;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
 }
 
 @media (min-width: 740px) and (max-width: 1680px) {

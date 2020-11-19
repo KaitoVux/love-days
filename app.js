@@ -33,10 +33,6 @@ document.addEventListener(
     var timer = setInterval(function () {
       olock();
     }, 1000);
-
-    document
-      .getElementsByTagName("body")[0]
-      .insertAdjacentHTML("beforeend", "<div id='mask'></div>");
   },
   false
 );
