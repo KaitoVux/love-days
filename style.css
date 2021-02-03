@@ -160,6 +160,7 @@ anni {
 
 #music audio {
     outline: none;
+    -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.26);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.26);
     border-radius: 26px;
     width: 100%;
