@@ -12,6 +12,7 @@ const music = [
     "Perfect - Cover by Tanner Patrick",
     "You Are The Reason - Calum Scott",
     "Always - Isak Danielson",
+    "Little Things - One Direction",
 ];
 
 let isPlayed = ["The One - Kodaline"];
