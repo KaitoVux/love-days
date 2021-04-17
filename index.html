@@ -1,56 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@4
+            00;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+            integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
+            crossorigin="anonymous"
+        />
+        <title>Love you</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet" />
-    <title>Love you </title>
-</head>
-
-<body>
-    <section class="main">
-        <div id="wrapper">
-            <h1>Love Days</h1>
+    <body>
+        <section class="main container">
+            <h3 class="app-title">Love Days</h3>
+            <!-- CLOCK BOX SECTION -->
             <div id="clock-box">
-                <div id="clock">
+                <div class="clocks">
                     <date>0 DAYS</date>
                     <time>00:00:00</time>
                 </div>
             </div>
+            <!-- END CLOCK BOX SECTION -->
 
+            <!-- CARD SECTION -->
             <div id="info">
-                <div class="one">
-                    <img src="img/girl.jpg" class="avt avt2" />
+                <div class="info-card">
+                    <img src="img/girl_1.jpg" class="avt avt-girl" />
                     <p>Éc Éc</p>
                 </div>
                 <div id="heart">
                     <span class="heart-icon">❤</span>
                     <anni>...</anni>
                 </div>
-                <div class="two">
-                    <img src="img/boy.jpg" class="avt avt1" />
+                <div class="info-card">
+                    <img src="img/boy.jpg" class="avt avt-boy" />
                     <p>Meo Meo</p>
                 </div>
             </div>
+            <!-- END CARD SECTION -->
+            <div class="music-player-wrapper">
+                <div class="music-container" id="music-container">
+                    <div class="music-info">
+                        <h4 id="title"></h4>
+                        <div class="progress-container" id="progress-container">
+                            <div class="progress" id="progress"></div>
+                        </div>
+                    </div>
 
-            <div id="music">
-                <audio controls autoplay>
-                    <source id="song__source" src="/music/The One - Kodaline.mp3" type="audio/mp3" />
-                    <p>Your browser does not support the audio element.</p>
-                </audio>
-                <p id="song-name"></p>
+                    <audio
+                        src="music/The One - Kodaline.mp3"
+                        id="audio"
+                    ></audio>
+
+                    <div class="img-container">
+                        <img
+                            src="https://upload.wikimedia.org/wikipedia/en/thumb/7/76/The_One_single_cover.png/220px-The_One_single_cover.png"
+                            alt="music-cover"
+                            id="cover"
+                        />
+                    </div>
+                    <div class="navigation">
+                        <button id="prev" class="action-btn">
+                            <i class="fas fa-backward"></i>
+                        </button>
+                        <button id="play" class="action-btn action-btn-big">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button id="next" class="action-btn">
+                            <i class="fas fa-forward"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
-</body>
-<footer>
-    <div class="footer">Thank you for your love 💕</div>
-</footer>
-<script src="musicPlayer.js"></script>
-<script src="app.js"></script>
-
+            <div class="footer-wrapper container">
+                <p class="footer">Thank you for your love 💕</p>
+            </div>
+        </section>
+    </body>
+    <script src="app.js"></script>
+    <script type="module" src="musicPlayer.js"></script>
 </html>

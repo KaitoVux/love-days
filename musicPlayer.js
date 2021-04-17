@@ -1,43 +1,116 @@
-const music = [
-    "I Do - 911",
-    "The One - Kodaline",
-    "All Of Me - John Legend",
-    "Make You Feel My Love - Adele",
-    "Wake Me Up When September Ends - Green D",
-    "Can't Take My Eyes Off You",
-    "Say You Won't Let Go - James Arthur",
-    "Love Someone - Lukas Graham",
-    "I'm Yours - Jason Mraz",
-    "Perfect - Ed Sheeran",
-    "Perfect - Cover by Tanner Patrick",
-    "You Are The Reason - Calum Scott",
-    "Always - Isak Danielson",
-    "Little Things - One Direction",
-];
+import { songs } from "./songs.js";
+const playList = songs;
 
-let isPlayed = ["The One - Kodaline"];
+let songIdx = 1;
+const musicContainer = document.getElementById("music-container");
+const playBtn = document.getElementById("play");
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
+
+const audio = document.getElementById("audio");
+const progress = document.getElementById("progress");
+const progressContainer = document.getElementById("progress-container");
+const title = document.getElementById("title");
+const cover = document.getElementById("cover");
+
+function findSong(id) {
+    return playList.find((item) => item.id === id);
+}
+
+function loadSong(id) {
+    const song = findSong(id);
+    if (song) {
+        title.innerText = song.title;
+        audio.src = song.src;
+        cover.src = song.thumbnail;
+    }
+}
+
+function playSong() {
+    musicContainer.classList.add("play");
+    playBtn.querySelector("i.fas").classList.remove("fa-play");
+    playBtn.querySelector("i.fas").classList.add("fa-pause");
+
+    audio.play();
+}
+
+// Pause song
+function pauseSong() {
+    musicContainer.classList.remove("play");
+    playBtn.querySelector("i.fas").classList.add("fa-play");
+    playBtn.querySelector("i.fas").classList.remove("fa-pause");
+
+    audio.pause();
+}
+
+// Previous song
+function prevSong() {
+    songIdx--;
+
+    if (songIdx < 0) {
+        songIdx = playList.length - 1;
+    }
+
+    loadSong(songIdx);
+
+    playSong();
+}
+
+// Next song
+function nextSong() {
+    songIdx++;
+
+    if (songIdx > playList.length - 1) {
+        songIdx = 1;
+    }
+
+    loadSong(songIdx);
+
+    playSong();
+}
+
+// Update progress bar
+function updateProgress(e) {
+    const { duration, currentTime } = e.srcElement;
+    const progressPercent = (currentTime / duration) * 100;
+    progress.style.width = `${progressPercent}%`;
+}
+
+// Set progress bar
+function setProgress(e) {
+    const width = this.clientWidth;
+    const clickX = e.offsetX;
+    const duration = audio.duration;
+
+    audio.currentTime = (clickX / width) * duration;
+}
+
+loadSong(1);
+
+// Event listeners
+playBtn.addEventListener("click", () => {
+    const isPlaying = musicContainer.classList.contains("play");
+
+    if (isPlaying) {
+        pauseSong();
+    } else {
+        playSong();
+    }
+});
+
+// Change song
+prevBtn.addEventListener("click", prevSong);
+nextBtn.addEventListener("click", nextSong);
+
+// Time/song update
+audio.addEventListener("timeupdate", updateProgress);
+
+// Click on progress bar
+progressContainer.addEventListener("click", setProgress);
+
+// Song ends
+audio.addEventListener("ended", nextSong);
 
 document.addEventListener("DOMContentLoaded", function () {
-    let song = document.getElementById("song__source");
-
-    songTitle = document.getElementById("song-name");
-    songTitle.innerHTML = `The One - Kodaline`;
-
-    let audio = document.querySelector("audio");
-    audio.onended = function () {
-        // random song
-        let nextSong = music[Math.floor(Math.random() * music.length)];
-        if (isPlayed.length === music.length) {
-            isPlayed = [];
-        }
-        while (isPlayed.includes(nextSong) && isPlayed.length < music.length) {
-            nextSong = music[Math.floor(Math.random() * music.length)];
-        }
-        song.src = `music/${nextSong}.mp3`;
-        audio.load();
-        audio.play();
-        songName = nextSong;
-        document.getElementById("song-name").innerHTML = `${songName}`;
-        isPlayed.push(nextSong);
-    };
+    loadSong(1);
 });
