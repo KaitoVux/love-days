@@ -94,4 +94,11 @@ export const songs = [
         thumbnail:
             "https://upload.wikimedia.org/wikipedia/en/1/10/One_Direction_-_Little_Things.png",
     },
+    {
+        id: 15,
+        title: "I Know You Know - Unknown",
+        src: "/music/I Know You Know - Unknown.mp3",
+        thumbnail:
+            "https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2FKDthAD1FILXMeeFCyANLSAQIYE6OsATPEdn4IAV79LUHA1558716766866compressflag.jpeg&thumbnail=650x2147483647&quality=80&type=jpg",
+    },
 ];
