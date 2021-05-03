@@ -3,18 +3,22 @@
     box-sizing: border-box;
 }
 
+html {
+    height: 100%;
+}
+
 body {
     background-image: linear-gradient(
         to top,
         rgba(143, 68, 204, 0.42) 0%,
         rgba(240, 156, 216, 0.42) 100%
     );
-    height: 100vh;
     margin: 0;
-    font-size: 62.5%;
+    background-repeat: no-repeat;
+    background-size: cover;
     line-height: 1.6rem;
     font-family: "Dancing Script", cursive;
-    height: 100vh;
+    min-height: 100%;
 }
 
 .container {
@@ -158,7 +162,7 @@ anni {
 /* music player */
 .music-player-wrapper {
     display: flex;
-    max-width: 40%;
+    max-width: 30%;
     margin: 150px auto 0 auto;
 }
 
@@ -294,4 +298,109 @@ anni {
     font-size: 2.4rem;
     line-height: 2.4rem;
     margin: 0;
+}
+
+/* Mobile View */
+
+@media (max-width: 480px) {
+    html {
+        height: unset;
+    }
+    .app-title {
+        width: 100%;
+        text-align: center;
+        padding: 2.6rem;
+        font-size: 3.6rem;
+    }
+    #clock-box .clocks {
+        width: 80%;
+    }
+
+    .clocks {
+        padding: 0.6rem;
+    }
+
+    date {
+        font-size: 1.8rem !important;
+    }
+
+    #info {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2rem;
+    }
+
+    .info-card p {
+        font-size: 1.6rem;
+    }
+
+    .avt {
+        width: 180px;
+        height: 180px;
+    }
+
+    #heart {
+        margin: 20px;
+    }
+
+    #heart .heart-icon {
+        display: block;
+        font-size: 2.8rem;
+        margin-bottom: 1rem;
+    }
+
+    anni {
+        font-size: 1.3rem;
+    }
+
+    .music-container {
+        padding: 1rem;
+        margin-top: 80px;
+    }
+
+    .music-player-wrapper {
+        max-width: 80%;
+        margin: 30px auto;
+    }
+
+    .navigation {
+        width: 40%;
+    }
+
+    .navigation button {
+        font-size: 17px !important;
+        margin: 0 12px;
+    }
+
+    #cover {
+        height: 80px;
+        width: 80px;
+    }
+
+    .img-container {
+        height: 80px;
+    }
+
+    .img-container::after {
+        width: 10px;
+        height: 10px;
+        left: 38%;
+        bottom: 50%;
+        transform: translate(-50%, 50%);
+    }
+
+    .footer-wrapper {
+        margin-top: 1rem;
+    }
+
+    .footer {
+        font-size: 1.8rem;
+        line-height: 1.8rem;
+        padding: 0 0 15px 0;
+    }
+
+    .music-info {
+        padding: 8px;
+        text-align: center;
+    }
 }
