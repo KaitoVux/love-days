@@ -101,4 +101,10 @@ export const songs = [
         thumbnail:
             "https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2FKDthAD1FILXMeeFCyANLSAQIYE6OsATPEdn4IAV79LUHA1558716766866compressflag.jpeg&thumbnail=650x2147483647&quality=80&type=jpg",
     },
+    {
+        id: 16,
+        title: "Munn - Loved Us More",
+        src: "/music/Munn - Loved Us More.mp3",
+        thumbnail: "https://i.ytimg.com/vi/Svq5Q0LmaFc/maxresdefault.jpg",
+    },
 ];
