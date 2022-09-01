@@ -13,7 +13,6 @@ export const CountUp: FC = () => {
     useEffect(() => {
         const now = dayjs();
         const duration = dayjs.duration(now.diff(dayjs(startDate)));
-        console.log(duration);
         setDatePass(
             `${duration.years()} Years ${duration.months() ? duration.months() + "Months" : ""} ${
                 duration.days() ? duration.days() + " Days" : ""
@@ -28,7 +27,7 @@ export const CountUp: FC = () => {
             >
                 <span className={"text-5xl font-bold"}>{datePass}</span>
                 <Clock
-                    className={"text-3xl pt-4 font-medium"}
+                    className={"text-4xl pt-4 font-medium"}
                     format={"HH [hours] mm [mins] ss [secs]"}
                     ticking={true}
                     timezone="Asia/Ho_Chi_Minh"

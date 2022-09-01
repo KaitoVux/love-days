@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { MainSection } from "../components/MainSection";
+import { Player } from "../components/Player";
 import { MainTitle } from "../components/Title";
 import { MainLayout } from "../layouts/MainLayout";
 
@@ -18,9 +19,16 @@ const Home: NextPage = () => {
                 <link rel="icon" href="/favicon.png" />
             </Head>
             <MainLayout>
-                <MainTitle />
-                <CountUp />
-                <MainSection />
+                <div className="grid md:grid-cols-3 xs:grid-cols-1 lg:gap-3 md:gap-2 mb-40">
+                    <div className="md:col-span-2">
+                        <MainTitle />
+                        <CountUp />
+                        <MainSection />
+                    </div>
+                    <div className="mx-auto">
+                        <Player />
+                    </div>
+                </div>
             </MainLayout>
         </section>
     );
