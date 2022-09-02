@@ -143,8 +143,11 @@ export const Player: FC = () => {
     return (
         <div className={styles.card}>
             <div className="current-song">
-                <audio ref={(ref) => (playerRef.current = ref as HTMLAudioElement)} autoPlay>
-                    <source src={musicList[index].audio} type="audio/ogg" />
+                <audio
+                    ref={(ref) => (playerRef.current = ref as HTMLAudioElement)}
+                    src={musicList[index].audio}
+                    autoPlay
+                >
                     Your browser does not support the audio element.
                 </audio>
                 <div className="img-wrap">

@@ -26,7 +26,7 @@ const Home: NextPage = () => {
                         <CountUp />
                         <MainSection />
                     </div>
-                    <div className="mx-auto xs:pt-10 lg:pt-16">
+                    <div className="mx-auto pt-16">
                         <Player />
                     </div>
                 </div>
