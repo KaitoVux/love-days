@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import { FC, useEffect, useRef, useState } from "react";
+import { songs } from "../../utils/songs";
 import styles from "./Player.module.scss";
 
 export interface ISong {
@@ -14,40 +15,11 @@ export interface ISong {
 export const Player: FC = () => {
     const [index, setIndex] = useState(0);
     const [currentTime, setCurrentTime] = useState("0:00");
-    const [musicList, setMusicList] = useState([
-        {
-            name: "Nice piano and ukulele",
-            author: "Royalty",
-            img: "https://www.bensound.com/bensound-img/buddy.jpg",
-            audio: "https://www.bensound.com/bensound-music/bensound-buddy.mp3",
-            duration: "2:02",
-        },
-        {
-            name: "Gentle acoustic",
-            author: "Acoustic",
-            img: "https://www.bensound.com/bensound-img/sunny.jpg",
-            audio: "https://www.bensound.com//bensound-music/bensound-sunny.mp3",
-            duration: "2:20",
-        },
-        {
-            name: "Corporate motivational",
-            author: "Corporate",
-            img: "https://www.bensound.com/bensound-img/energy.jpg",
-            audio: "https://www.bensound.com/bensound-music/bensound-energy.mp3",
-            duration: "2:59",
-        },
-        {
-            name: "Slow cinematic",
-            author: "Royalty",
-            img: "https://www.bensound.com/bensound-img/slowmotion.jpg",
-            audio: "https://www.bensound.com/bensound-music/bensound-slowmotion.mp3",
-            duration: "3:26",
-        },
-    ]);
-    const [pause, setPause] = useState(false);
+    const [musicList, setMusicList] = useState(songs);
+    const [pause, setPause] = useState(true);
 
     // Refs
-    const playerRef = useRef<any>();
+    const playerRef = useRef<HTMLAudioElement>();
     const timelineRef = useRef<any>();
     const playheadRef = useRef<any>();
     const hoverPlayheadRef = useRef<any>();
@@ -117,7 +89,7 @@ export const Player: FC = () => {
         if (duration && playerRef?.current?.currentTime) {
             const playPercent = 100 * (playerRef?.current?.currentTime / duration);
             playheadRef.current.style.width = playPercent + "%";
-            const currentTime = formatTime(parseInt(playerRef?.current?.currentTime));
+            const currentTime = formatTime(playerRef?.current?.currentTime);
             setCurrentTime(currentTime);
         }
     };
@@ -126,39 +98,36 @@ export const Player: FC = () => {
         const minutes = Math.floor(currentTime / 60);
         let seconds = Math.floor(currentTime % 60);
 
-        const secondsStr = seconds >= 10 ? seconds.toString : "0" + (seconds % 60);
+        const secondsStr = seconds >= 10 ? seconds.toString() : "0" + (seconds % 60);
 
         const formatTime = minutes + ":" + secondsStr;
 
         return formatTime;
     };
 
-    const updatePlayer = () => {
-        const currentSong = musicList[index];
-        const audio = new Audio(currentSong.audio);
+    const updatePlayer = (index: number) => {
+        setIndex(index);
         playerRef?.current?.load();
     };
 
     const nextSong = () => {
-        setIndex((index + 1) % musicList.length);
-        updatePlayer();
+        updatePlayer((index + 1) % musicList.length);
         if (pause) {
             playerRef?.current?.play();
+            setPause(!pause);
         }
     };
 
     const prevSong = () => {
-        setIndex((index + musicList.length - 1) % musicList.length);
-        updatePlayer();
+        updatePlayer((index + musicList.length - 1) % musicList.length);
         if (pause) {
+            setPause(!pause);
             playerRef?.current?.play();
         }
     };
 
     const playOrPause = () => {
-        const currentSong = musicList[index];
-        const audio = new Audio(currentSong.audio);
-        if (!pause) {
+        if (pause) {
             playerRef?.current?.play();
         } else {
             playerRef?.current?.pause();
@@ -166,18 +135,15 @@ export const Player: FC = () => {
         setPause(!pause);
     };
 
-    const clickAudio = (key: any) => {
-        setIndex(key);
-        updatePlayer();
-        if (pause) {
-            playerRef?.current?.play();
-            setPause(false);
-        }
+    const clickAudio = (index: number) => {
+        updatePlayer(index);
+        setPause(false);
+        playerRef?.current?.play();
     };
     return (
         <div className={styles.card}>
             <div className="current-song">
-                <audio ref={(ref) => (playerRef.current = ref)} autoPlay>
+                <audio ref={(ref) => (playerRef.current = ref as HTMLAudioElement)} autoPlay>
                     <source src={musicList[index].audio} type="audio/ogg" />
                     Your browser does not support the audio element.
                 </audio>
@@ -185,7 +151,7 @@ export const Player: FC = () => {
                     <img src={musicList[index].img} alt={musicList[index].name} />
                 </div>
                 <span className="song-name">{musicList[index].name}</span>
-                <span className="song-autor">{musicList[index].author}</span>
+                <span className="song-autor">{musicList[index].author || "Unknown"}</span>
 
                 <div className="time">
                     <div className="current-time">{currentTime}</div>
@@ -213,7 +179,7 @@ export const Player: FC = () => {
                     </button>
 
                     <button onClick={playOrPause} className="play current-btn p-5">
-                        {!pause ? (
+                        {pause ? (
                             <Image src={"/icons/play.svg"} width={20} height={20} className="fas fa-play" alt="" />
                         ) : (
                             <Image
@@ -237,8 +203,8 @@ export const Player: FC = () => {
                         onClick={() => clickAudio(key)}
                         className={
                             "track " +
-                            (index === key && !pause ? "current-audio" : "") +
-                            (index === key && pause ? "play-now" : "")
+                            (index === key && pause ? "current-audio" : "") +
+                            (index === key && !pause ? "play-now" : "")
                         }
                     >
                         <img className="track-img" src={music.img} alt="" />
@@ -246,7 +212,6 @@ export const Player: FC = () => {
                             <span className="track-name">{music.name}</span>
                             <span className="track-author">{music.author}</span>
                         </div>
-                        <span className="track-duration">{index === key ? currentTime : music.duration}</span>
                     </div>
                 ))}
             </div>
