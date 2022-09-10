@@ -11,8 +11,9 @@ export const MainSection: FC = () => {
     const startDate = new Date("2020-08-22T00:00:00");
     return (
         <section id="image-section" className="grid lg:grid-cols-3 sm:grid-cols-1 lg:gap-4 md:gap-2 py-24">
-            <div className="flex justify-end xs:justify-center">
+            <div className="flex justify-end xs:justify-center flex-col items-center">
                 <RoundedImage img={NiuBoa} />
+                <span className={`pt-10 text-5xl ${styles.name}`}>Niu boà</span>
             </div>
             <div className="flex flex-col justify-center items-center xs:py-4">
                 <div>
@@ -22,8 +23,9 @@ export const MainSection: FC = () => {
                     {dayjs(startDate).format("DD-MM-YYYY")}
                 </span>
             </div>
-            <div className="flex lg:justify-start xs:justify-center">
+            <div className="flex lg:justify-start xs:justify-center flex-col items-center">
                 <RoundedImage img={MiuLem} />
+                <span className={`pt-10 text-5xl ${styles.name}`}>Mìu Lem</span>
             </div>
         </section>
     );

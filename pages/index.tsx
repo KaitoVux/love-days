@@ -13,7 +13,7 @@ const CountUp = dynamic<{}>(() => import("../components/CountUp").then((module) 
 
 const Home: NextPage = () => {
     return (
-        <section id="main">
+        <section id="main" className="min-h-screen">
             <Head>
                 <title>Love Days</title>
                 <meta name="description" content="Made by Dat Vu with love" />
@@ -25,12 +25,12 @@ const Home: NextPage = () => {
                         <MainTitle />
                         <CountUp />
                         <MainSection />
+                        <Footer />
                     </div>
                     <div className="mx-auto pt-16">
                         <Player />
                     </div>
                 </div>
-                <Footer />
             </MainLayout>
         </section>
     );
