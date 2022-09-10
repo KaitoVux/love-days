@@ -8,12 +8,6 @@ export const songs: Array<ISong> = [
         img: "https://upload.wikimedia.org/wikipedia/en/thumb/7/76/The_One_single_cover.png/220px-The_One_single_cover.png",
     },
     {
-        name: "I Do",
-        author: "911",
-        audio: "/music/I Do - 911.mp3",
-        img: "https://i.ytimg.com/vi/Cgpzghb1zyo/maxresdefault.jpg",
-    },
-    {
         name: "All Of Me",
         author: "John Legend",
         audio: "/music/All Of Me - John Legend.mp3",
@@ -24,6 +18,12 @@ export const songs: Array<ISong> = [
         author: "Adele",
         audio: "/music/Make You Feel My Love - Adele.mp3",
         img: "https://i1.sndcdn.com/artworks-000328637838-mlumy9-t500x500.jpg",
+    },
+    {
+        name: "I Do",
+        author: "911",
+        audio: "/music/I Do - 911.mp3",
+        img: "https://i.ytimg.com/vi/Cgpzghb1zyo/maxresdefault.jpg",
     },
     {
         name: "Wake Me Up When September Ends",

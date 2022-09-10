@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { songs } from "../../utils/songs";
 import styles from "./Player.module.scss";
 
@@ -13,9 +13,9 @@ export interface ISong {
 }
 
 export const Player: FC = () => {
-    const [index, setIndex] = useState(0);
+    const [currentPlay, setCurrentPlay] = useState<ISong>(songs[0]);
     const [currentTime, setCurrentTime] = useState("0:00");
-    const [musicList, setMusicList] = useState(songs);
+    const musicList = songs;
     const [pause, setPause] = useState(true);
 
     // Refs
@@ -28,14 +28,12 @@ export const Player: FC = () => {
         const playerRefCur = playerRef?.current;
         const timelineRefCur = timelineRef.current;
         playerRefCur?.addEventListener("timeupdate", timeUpdate, false);
-        playerRefCur?.addEventListener("ended", nextSong, false);
         timelineRefCur.addEventListener("click", changeCurrentTime, false);
         timelineRefCur.addEventListener("mousemove", hoverTimeLine, false);
         timelineRefCur.addEventListener("mouseout", resetTimeLine, false);
 
         return () => {
             playerRefCur?.removeEventListener("timeupdate", timeUpdate);
-            playerRefCur?.removeEventListener("ended", nextSong);
             timelineRefCur?.removeEventListener("click", changeCurrentTime);
             timelineRefCur?.removeEventListener("mousemove", hoverTimeLine);
             timelineRefCur?.removeEventListener("mouseout", resetTimeLine);
@@ -105,30 +103,37 @@ export const Player: FC = () => {
         return formatTime;
     };
 
-    const updatePlayer = (index: number) => {
-        setIndex(index);
+    useEffect(() => {
         playerRef?.current?.load();
+        playerRef?.current?.play().then(() => {
+            setPause(false);
+        });
+    }, [currentPlay]);
+
+    const updatePlayer = (index: number) => {
+        const song = songs[index];
+        setCurrentPlay(song);
     };
 
     const nextSong = () => {
-        updatePlayer((index + 1) % musicList.length);
         if (pause) {
-            playerRef?.current?.play();
-            setPause(!pause);
+            setPause(false);
         }
+        const nextId = songs.indexOf(currentPlay) + 1;
+        updatePlayer(nextId % musicList.length);
     };
 
     const prevSong = () => {
-        updatePlayer((index + musicList.length - 1) % musicList.length);
         if (pause) {
-            setPause(!pause);
-            playerRef?.current?.play();
+            setPause(false);
         }
+        const prevId = songs.findIndex((x) => x.audio === currentPlay.audio) + musicList.length - 1;
+        updatePlayer(prevId % musicList.length);
     };
 
-    const playOrPause = () => {
+    const playOrPause = async () => {
         if (pause) {
-            playerRef?.current?.play();
+            await playerRef?.current?.play();
         } else {
             playerRef?.current?.pause();
         }
@@ -137,28 +142,22 @@ export const Player: FC = () => {
 
     const clickAudio = (index: number) => {
         updatePlayer(index);
-        setPause(false);
-        playerRef?.current?.play();
     };
     return (
         <div className={styles.card}>
             <div className="current-song">
-                <audio
-                    ref={(ref) => (playerRef.current = ref as HTMLAudioElement)}
-                    src={musicList[index].audio}
-                    autoPlay
-                >
+                <audio ref={(ref) => (playerRef.current = ref as HTMLAudioElement)} onEnded={nextSong} src={currentPlay.audio} autoPlay>
                     Your browser does not support the audio element.
                 </audio>
                 <div className="img-wrap">
-                    <img src={musicList[index].img} alt={musicList[index].name} />
+                    <img src={currentPlay.img} alt={currentPlay.name} />
                 </div>
-                <span className="song-name">{musicList[index].name}</span>
-                <span className="song-autor">{musicList[index].author || "Unknown"}</span>
+                <span className="song-name">{currentPlay.name}</span>
+                <span className="song-autor">{currentPlay.author || "Unknown"}</span>
 
                 <div className="time">
                     <div className="current-time">{currentTime}</div>
-                    <div className="end-time">{musicList[index].duration}</div>
+                    <div className="end-time">{currentPlay.duration}</div>
                 </div>
 
                 <div ref={(ref) => (timelineRef.current = ref)} id="timeline">
@@ -200,14 +199,14 @@ export const Player: FC = () => {
                 </div>
             </div>
             <div className="play-list">
-                {musicList.map((music, key = 0) => (
+                {musicList.map((music, index) => (
                     <div
-                        key={key}
-                        onClick={() => clickAudio(key)}
+                        key={index}
+                        onClick={() => clickAudio(index)}
                         className={
                             "track " +
-                            (index === key && pause ? "current-audio" : "") +
-                            (index === key && !pause ? "play-now" : "")
+                            (currentPlay.audio === music.audio && pause ? "current-audio" : "") +
+                            (currentPlay.audio === music.audio && !pause ? "play-now" : "")
                         }
                     >
                         <img className="track-img" src={music.img} alt="" />
