@@ -14,7 +14,7 @@ export const CountUp: FC = () => {
         const now = dayjs();
         const duration = dayjs.duration(now.diff(dayjs(startDate)));
         setDatePass(
-            `${duration.years()} Years ${duration.months() ? duration.months() + "Months" : ""} ${
+            `${duration.years()} Years ${duration.months() ? duration.months() + " Months" : ""} ${
                 duration.days() ? duration.days() + " Days" : ""
             }`
         );
