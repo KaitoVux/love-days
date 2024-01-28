@@ -11,7 +11,7 @@ export const songs: Array<ISong> = [
         name: "All Of Me",
         author: "John Legend",
         audio: "/music/All Of Me - John Legend.mp3",
-        img: "https://4.bp.blogspot.com/-LgRV8th6FIA/XB2pDdJ82qI/AAAAAAAAFHE/rBsqF8ZCsQMfnhO3cwnGyqUA7TvA2ErVACLcBGAs/s1600/eiIFYXs.jpg",
+        img: "https://cdn.imweb.me/thumbnail/20210617/07d16fbc20710.jpg",
     },
     {
         name: "Make You Feel My Love",
@@ -89,7 +89,7 @@ export const songs: Array<ISong> = [
         name: "I Know You Know",
         author: "",
         audio: "/music/I Know You Know - Unknown.mp3",
-        img: "https://nimg.ws.126.net/?url=http%3A%2F%2Fdingyue.ws.126.net%2FKDthAD1FILXMeeFCyANLSAQIYE6OsATPEdn4IAV79LUHA1558716766866compressflag.jpeg&img=650x2147483647&quality=80&type=jpg",
+        img: "https://i1.sndcdn.com/avatars-000437586054-giecep-t500x500.jpg",
     },
     {
         name: "Munn",

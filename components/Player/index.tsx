@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
-import { FC, useEffect, useMemo, useRef, useState } from "react";
-import { songs } from "../../utils/songs";
+import {FC, useEffect, useRef, useState} from "react";
+import {songs} from "../../utils/songs";
 import styles from "./Player.module.scss";
 
 export interface ISong {
@@ -83,7 +83,6 @@ export const Player: FC = () => {
 
     const timeUpdate = () => {
         const duration = playerRef?.current?.duration;
-        const timelineWidth = timelineRef.current.offsetWidth - playheadRef.current.offsetWidth;
         if (duration && playerRef?.current?.currentTime) {
             const playPercent = 100 * (playerRef?.current?.currentTime / duration);
             playheadRef.current.style.width = playPercent + "%";
@@ -98,9 +97,7 @@ export const Player: FC = () => {
 
         const secondsStr = seconds >= 10 ? seconds.toString() : "0" + (seconds % 60);
 
-        const formatTime = minutes + ":" + secondsStr;
-
-        return formatTime;
+        return minutes + ":" + secondsStr;
     };
 
     useEffect(() => {

@@ -14,7 +14,7 @@ export const CountUp: FC = () => {
         const now = dayjs();
         const duration = dayjs.duration(now.diff(dayjs(startDate)));
         setDatePass(
-            `${duration.years()} Years ${duration.months() ? duration.months() + "Months" : ""} ${
+            `${duration.years()} Years ${duration.months() ? duration.months() + " Months" : ""} ${
                 duration.days() ? duration.days() + " Days" : ""
             }`
         );
@@ -22,17 +22,20 @@ export const CountUp: FC = () => {
 
     return (
         <section id="clock">
-            <div
-                className={`${styles.wrapper} flex flex-col items-center rounded-full shadow-inner p-6 max-w-lg mx-auto`}
-            >
-                <span className={"text-5xl font-bold"}>{datePass}</span>
-                <Clock
-                    className={"text-4xl pt-4 font-medium"}
-                    format={"HH [hours] mm [mins] ss [secs]"}
-                    ticking={true}
-                    timezone="Asia/Ho_Chi_Minh"
-                />
+            <div className={"flex justify-center"}>
+                <div
+                    className={`${styles.wrapper} flex flex-col items-center rounded-full w-fit shadow-inner px-9 py-6`}
+                >
+                    <div className={"text-5xl font-bold"}>{datePass}</div>
+                    <Clock
+                        className={"text-4xl pt-4 font-medium"}
+                        format={"HH [hours] mm [mins] ss [secs]"}
+                        ticking={true}
+                        timezone="Asia/Ho_Chi_Minh"
+                    />
+                </div>
             </div>
+
         </section>
     );
 };
