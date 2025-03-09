@@ -4,8 +4,10 @@ const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
     compiler: {
-        removeConsole: true,
+        removeConsole: process.env.NODE_ENV === 'production',
     },
+    // Cloudflare Pages specific configuration
+    output: 'standalone',
 };
 
 module.exports = nextConfig;

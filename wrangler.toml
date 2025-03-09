@@ -1,0 +1,14 @@
+[build]
+command = "npm run build"
+publish = ".next"
+
+[build.environment]
+NODE_VERSION = "18"
+
+[site]
+bucket = "./public"
+entry-point = "public/_worker.js"
+
+[env.production]
+name = "love-days"
+route = "*/*" 
