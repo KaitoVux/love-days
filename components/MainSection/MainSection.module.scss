@@ -1,4 +1,4 @@
-@import '../../styles/variables';
+@use "../../styles/variables" as vars;
 
 @keyframes heartbeat {
     0% {
@@ -26,9 +26,9 @@
 }
 
 .date {
-    color: $secondary;
+    color: vars.$secondary;
 }
 
 .name {
-    color: $primary;
+    color: vars.$primary;
 }

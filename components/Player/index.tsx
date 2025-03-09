@@ -154,96 +154,86 @@ export const Player: FC = () => {
     };
     return (
         <div className={styles.card}>
-            <div className="current-song">
-                <audio ref={playerRef} onEnded={nextSong} src={currentPlay.audio} autoPlay>
+            <div className={styles.currentSong}>
+                <audio ref={playerRef} onEnded={nextSong} src={currentPlay.audio} autoPlay className={styles.audioPlayer}>
                     Your browser does not support the audio element.
                 </audio>
-                <div className="img-wrap">
+                <div className={styles.imgWrap}>
                     <img src={currentPlay.img} alt={currentPlay.name} />
                 </div>
-                <span className="song-name">{currentPlay.name}</span>
-                <span className="song-autor">{currentPlay.author || "Unknown"}</span>
+                <span className={styles.songName}>{currentPlay.name}</span>
+                <span className={styles.songAuthor}>{currentPlay.author || "Unknown"}</span>
 
-                <div className="time">
-                    <div className="current-time">{currentTime}</div>
-                    <div className="end-time">{currentPlay.duration}</div>
+                <div className={styles.timeContainer}>
+                    <div className={styles.currentTime}>{currentTime}</div>
+                    <div className={styles.endTime}>{currentPlay.duration}</div>
                 </div>
 
                 <div 
                     ref={timelineRef}
-                    id="timeline"
+                    className={styles.timeline}
                     onClick={changeCurrentTime}
                     onMouseMove={hoverTimeLine}
                     onMouseLeave={resetTimeLine}
                 >
-                    <div ref={playheadRef} id="playhead"></div>
+                    <div ref={playheadRef} className={styles.playhead}></div>
                     <div
                         ref={hoverPlayheadRef}
-                        className="hover-playhead"
+                        className={styles.hoverPlayhead}
                         data-content="0:00"
                     ></div>
                 </div>
 
-                <div className="controls">
-                    <button onClick={prevSong} className="prev prev-next current-btn">
+                <div className={styles.controls}>
+                    <button onClick={prevSong} className={styles.prevNextButton}>
                         <Image
                             src="/icons/previous.svg"
                             width={20}
                             height={20}
                             alt="Previous"
-                            className="fas fa-backward"
-                            style={{ width: 'auto', height: 'auto' }}
                         />
                     </button>
 
-                    <button onClick={playOrPause} className="play current-btn p-5">
+                    <button onClick={playOrPause} className={styles.playButton}>
                         {pause ? (
                             <Image 
-                                src="/icons/play.svg" 
+                                src="/icons/play.svg"
                                 width={20} 
                                 height={20} 
-                                className="fas fa-play" 
                                 alt="Play"
-                                style={{ width: 'auto', height: 'auto' }}
                             />
                         ) : (
                             <Image
-                                className="fas fa-pause"
+                                src="/icons/pause.svg"
                                 width={20}
                                 height={20}
-                                src="/icons/pause.svg"
                                 alt="Pause"
-                                style={{ width: 'auto', height: 'auto' }}
                             />
                         )}
                     </button>
-                    <button onClick={nextSong} className="next prev-next current-btn">
+                    <button onClick={nextSong} className={styles.prevNextButton}>
                         <Image 
-                            src="/icons/next.svg" 
+                            src="/icons/next.svg"
                             width={20} 
                             height={20} 
-                            alt="Next" 
-                            className="fas fa-forward"
-                            style={{ width: 'auto', height: 'auto' }}
+                            alt="Next"
                         />
                     </button>
                 </div>
             </div>
-            <div className="play-list">
+            <div className={styles.playlist}>
                 {musicList.map((music, index) => (
                     <div
                         key={index}
                         onClick={() => clickAudio(index)}
-                        className={
-                            "track " +
-                            (currentPlay.audio === music.audio && pause ? "current-audio" : "") +
-                            (currentPlay.audio === music.audio && !pause ? "play-now" : "")
-                        }
+                        className={`${styles.track} ${
+                            currentPlay.audio === music.audio && pause ? styles.currentAudio : ""
+                        } ${currentPlay.audio === music.audio && !pause ? styles.playNow : ""}`}
                     >
-                        <img className="track-img" src={music.img} alt="" />
-                        <div className="track-discr">
-                            <span className="track-name">{music.name}</span>
-                            <span className="track-author">{music.author}</span>
+                        <img className={styles.trackImg} src={music.img} alt="" />
+                        <div className={styles.trackDescription}>
+                            <span className={styles.trackName}>{music.name}</span>
+                            <span className={styles.trackAuthor}>{music.author}</span>
                         </div>
                     </div>
                 ))}

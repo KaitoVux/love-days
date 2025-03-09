@@ -17,7 +17,14 @@ export const MainSection: FC = () => {
             </div>
             <div className="flex flex-col justify-center items-center xs:py-4">
                 <div>
-                    <Image width={64} className={styles.heart} height={64} src={Heart} alt="" objectFit="cover" />
+                    <Image 
+                        width={64} 
+                        height={64} 
+                        className={styles.heart} 
+                        src={Heart} 
+                        alt=""
+                        style={{ objectFit: 'cover' }} 
+                    />
                 </div>
                 <span className={`${styles.date} text-3xl font-bold pt-4`}>
                     {dayjs(startDate).format("DD-MM-YYYY")}
@@ -25,7 +32,7 @@ export const MainSection: FC = () => {
             </div>
             <div className="flex lg:justify-start xs:justify-center flex-col items-center">
                 <RoundedImage img={MiuLem} />
-                <span className={`pt-10 text-5xl ${styles.name}`}>Mìu Lem</span>
+                <span className={`pt-10 text-5xl ${styles.name}`}>Mỉu Lem</span>
             </div>
         </section>
     );
