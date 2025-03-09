@@ -7,7 +7,10 @@ const nextConfig = {
         removeConsole: process.env.NODE_ENV === 'production',
     },
     // Cloudflare Pages specific configuration
-    output: 'standalone',
+    output: 'export',
+    images: {
+        unoptimized: true,
+    },
 };
 
 module.exports = nextConfig;
