@@ -18,77 +18,89 @@ export const Player: FC = () => {
     const musicList = songs;
     const [pause, setPause] = useState(true);
 
-    // Refs
-    const playerRef = useRef<HTMLAudioElement>();
-    const timelineRef = useRef<any>();
-    const playheadRef = useRef<any>();
-    const hoverPlayheadRef = useRef<any>();
+    // Refs with proper typing
+    const playerRef = useRef<HTMLAudioElement>(null);
+    const timelineRef = useRef<HTMLDivElement>(null);
+    const playheadRef = useRef<HTMLDivElement>(null);
+    const hoverPlayheadRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const playerRefCur = playerRef?.current;
         const timelineRefCur = timelineRef.current;
         playerRefCur?.addEventListener("timeupdate", timeUpdate, false);
-        timelineRefCur.addEventListener("click", changeCurrentTime, false);
-        timelineRefCur.addEventListener("mousemove", hoverTimeLine, false);
-        timelineRefCur.addEventListener("mouseout", resetTimeLine, false);
+        timelineRefCur?.addEventListener("click", changeCurrentTime as any, false);
+        timelineRefCur?.addEventListener("mousemove", hoverTimeLine as any, false);
+        timelineRefCur?.addEventListener("mouseout", resetTimeLine, false);
 
         return () => {
             playerRefCur?.removeEventListener("timeupdate", timeUpdate);
-            timelineRefCur?.removeEventListener("click", changeCurrentTime);
-            timelineRefCur?.removeEventListener("mousemove", hoverTimeLine);
+            timelineRefCur?.removeEventListener("click", changeCurrentTime as any);
+            timelineRefCur?.removeEventListener("mousemove", hoverTimeLine as any);
             timelineRefCur?.removeEventListener("mouseout", resetTimeLine);
         };
     }, []);
 
     const changeCurrentTime = (e: any) => {
         const duration = playerRef?.current?.duration;
+        const timeline = timelineRef.current;
+        if (!timeline || !duration) return;
 
-        const playheadWidth = timelineRef.current?.offsetWidth;
-        const offsetWidht = timelineRef.current?.offsetLeft;
+        const playheadWidth = timeline.offsetWidth;
+        const offsetWidht = timeline.offsetLeft;
         const userClickWidht = e.clientX - offsetWidht;
 
         const userClickWidhtInPercent = (userClickWidht * 100) / playheadWidth;
 
-        playheadRef.current.style.width = userClickWidhtInPercent + "%";
-        if (playerRef?.current && duration) {
+        if (playheadRef.current) {
+            playheadRef.current.style.width = userClickWidhtInPercent + "%";
+        }
+        if (playerRef?.current) {
             playerRef.current.currentTime = (duration * userClickWidhtInPercent) / 100;
         }
     };
 
     const hoverTimeLine = (e: any) => {
         const duration = playerRef?.current?.duration;
+        const timeline = timelineRef.current;
+        const hoverPlayhead = hoverPlayheadRef.current;
+        
+        if (!timeline || !hoverPlayhead) return;
 
-        const playheadWidth = timelineRef.current.offsetWidth;
-
-        const offsetWidht = timelineRef.current.offsetLeft;
+        const playheadWidth = timeline.offsetWidth;
+        const offsetWidht = timeline.offsetLeft;
         const userClickWidht = e.clientX - offsetWidht;
         const userClickWidhtInPercent = (userClickWidht * 100) / playheadWidth;
 
         if (userClickWidhtInPercent <= 100) {
-            hoverPlayheadRef.current.style.width = userClickWidhtInPercent + "%";
+            hoverPlayhead.style.width = userClickWidhtInPercent + "%";
         }
 
         if (duration) {
             const time = (duration * userClickWidhtInPercent) / 100;
 
             if (time >= 0 && time <= duration) {
-                hoverPlayheadRef.current.dataset.content = formatTime(time);
+                hoverPlayhead.dataset.content = formatTime(time);
             }
         }
     };
 
     const resetTimeLine = () => {
-        hoverPlayheadRef.current.style.width = 0;
+        const hoverPlayhead = hoverPlayheadRef.current;
+        if (!hoverPlayhead) return;
+        hoverPlayhead.style.width = "0%";
     };
 
     const timeUpdate = () => {
         const duration = playerRef?.current?.duration;
-        if (duration && playerRef?.current?.currentTime) {
-            const playPercent = 100 * (playerRef?.current?.currentTime / duration);
-            playheadRef.current.style.width = playPercent + "%";
-            const currentTime = formatTime(playerRef?.current?.currentTime);
-            setCurrentTime(currentTime);
-        }
+        const playhead = playheadRef.current;
+        const player = playerRef.current;
+
+        if (!duration || !playhead || !player?.currentTime) return;
+
+        const playPercent = 100 * (player.currentTime / duration);
+        playhead.style.width = playPercent + "%";
+        const currentTime = formatTime(player.currentTime);
+        setCurrentTime(currentTime);
     };
 
     const formatTime = (currentTime: number) => {
@@ -143,7 +155,7 @@ export const Player: FC = () => {
     return (
         <div className={styles.card}>
             <div className="current-song">
-                <audio ref={(ref) => (playerRef.current = ref as HTMLAudioElement)} onEnded={nextSong} src={currentPlay.audio} autoPlay>
+                <audio ref={playerRef} onEnded={nextSong} src={currentPlay.audio} autoPlay>
                     Your browser does not support the audio element.
                 </audio>
                 <div className="img-wrap">
@@ -157,10 +169,16 @@ export const Player: FC = () => {
                     <div className="end-time">{currentPlay.duration}</div>
                 </div>
 
-                <div ref={(ref) => (timelineRef.current = ref)} id="timeline">
-                    <div ref={(ref) => (playheadRef.current = ref)} id="playhead"></div>
+                <div 
+                    ref={timelineRef}
+                    id="timeline"
+                    onClick={changeCurrentTime}
+                    onMouseMove={hoverTimeLine}
+                    onMouseLeave={resetTimeLine}
+                >
+                    <div ref={playheadRef} id="playhead"></div>
                     <div
-                        ref={(ref) => (hoverPlayheadRef.current = ref)}
+                        ref={hoverPlayheadRef}
                         className="hover-playhead"
                         data-content="0:00"
                     ></div>
@@ -169,29 +187,45 @@ export const Player: FC = () => {
                 <div className="controls">
                     <button onClick={prevSong} className="prev prev-next current-btn">
                         <Image
-                            src={"/icons/previous.svg"}
+                            src="/icons/previous.svg"
                             width={20}
                             height={20}
-                            alt=""
+                            alt="Previous"
                             className="fas fa-backward"
-                        ></Image>
+                            style={{ width: 'auto', height: 'auto' }}
+                        />
                     </button>
 
                     <button onClick={playOrPause} className="play current-btn p-5">
                         {pause ? (
-                            <Image src={"/icons/play.svg"} width={20} height={20} className="fas fa-play" alt="" />
+                            <Image 
+                                src="/icons/play.svg" 
+                                width={20} 
+                                height={20} 
+                                className="fas fa-play" 
+                                alt="Play"
+                                style={{ width: 'auto', height: 'auto' }}
+                            />
                         ) : (
                             <Image
                                 className="fas fa-pause"
                                 width={20}
                                 height={20}
-                                src={"/icons/pause.svg"}
-                                alt=""
-                            ></Image>
+                                src="/icons/pause.svg"
+                                alt="Pause"
+                                style={{ width: 'auto', height: 'auto' }}
+                            />
                         )}
                     </button>
                     <button onClick={nextSong} className="next prev-next current-btn">
-                        <Image src={"/icons/next.svg"} width={20} height={20} alt="" className="fas fa-forward"></Image>
+                        <Image 
+                            src="/icons/next.svg" 
+                            width={20} 
+                            height={20} 
+                            alt="Next" 
+                            className="fas fa-forward"
+                            style={{ width: 'auto', height: 'auto' }}
+                        />
                     </button>
                 </div>
             </div>
