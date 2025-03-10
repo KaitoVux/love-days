@@ -1,4 +1,4 @@
-@import "../../styles/variables";
+@use "../../styles/variables" as v;
 
 #clock {
     margin-top: 25px;
@@ -12,5 +12,5 @@
         #ffdde1,
         #ee9ca7
     );
-    color: $secondary;
+    color: v.$secondary;
 }
