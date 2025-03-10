@@ -1,5 +1,5 @@
-@use "../../styles/variables" as vars;
+@use "../../styles/variables" as v;
 
 .title {
-    color: vars.$primary;
+    color: v.$primary;
 }

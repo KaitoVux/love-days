@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, useEffect, useState } from "react";
 import styles from "./CountUp.module.scss";
 import dayjs from "dayjs";
@@ -6,9 +8,10 @@ import { Clock } from "../Clock";
 
 dayjs.extend(duration);
 
+const startDate = new Date("2020-08-22T00:00:00");
+
 export const CountUp: FC = () => {
-    const startDate = new Date("2020-08-22T00:00:00");
-    const [datePass, setDatePass] = useState<string>("");
+    const [datePass, setDatePass] = useState("Loading...");
 
     useEffect(() => {
         const updateDuration = () => {
@@ -21,7 +24,7 @@ export const CountUp: FC = () => {
             );
         };
 
-        // Update immediately
+        // Update immediately on mount
         updateDuration();
 
         // Update every minute

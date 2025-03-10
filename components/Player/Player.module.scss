@@ -1,4 +1,4 @@
-@use "../../styles/variables" as *;
+@use "../../styles/variables" as v;
 
 $border-radius: 20px;
 $base: #071739;
@@ -71,7 +71,7 @@ $transition: 0.3s all ease;
 }
 
 .songAuthor {
-    color: $primary;
+    color: v.$primary;
     font-size: 16px;
 }
 
@@ -87,7 +87,7 @@ $transition: 0.3s all ease;
     margin: 0 auto;
     width: $time-line-width;
     height: 5px;
-    background: $primary;
+    background: v.$primary;
     border-radius: 5px;
     cursor: pointer;
 
@@ -330,7 +330,7 @@ $transition: 0.3s all ease;
 .trackAuthor {
     margin-top: 8px;
     font-weight: 300;
-    color: $primary;
+    color: v.$primary;
     font-size: 14px;
 }
 

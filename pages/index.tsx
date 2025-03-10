@@ -6,10 +6,7 @@ import { MainSection } from "../components/MainSection";
 import { Player } from "../components/Player";
 import { MainTitle } from "../components/Title";
 import { MainLayout } from "../layouts/MainLayout";
-
-const CountUp = dynamic<{}>(() => import("../components/CountUp").then((module) => module.CountUp), {
-    ssr: false,
-});
+import { CountUp } from "../components/CountUp";
 
 const Home: NextPage = () => {
     return (
