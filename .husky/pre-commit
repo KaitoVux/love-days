@@ -1,4 +1,10 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx lint-staged
+echo "🔍 Running lint-staged checks..."
+npx lint-staged || exit 1
+
+echo "🔍 Running project-wide lint check..."
+npm run lint || exit 1
+
+echo "✅ All checks passed!"

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { FC, useEffect, useState } from "react";
 import styles from "./CountUp.module.scss";
@@ -11,38 +11,38 @@ dayjs.extend(duration);
 const startDate = new Date("2020-08-22T00:00:00");
 
 export const CountUp: FC = () => {
-    const [datePass, setDatePass] = useState("Loading...");
+  const [datePass, setDatePass] = useState("Loading...");
 
-    useEffect(() => {
-        const updateDuration = () => {
-            const now = dayjs();
-            const duration = dayjs.duration(now.diff(dayjs(startDate)));
-            setDatePass(
-                `${duration.years()} Years ${duration.months() ? duration.months() + " Months" : ""} ${
-                    duration.days() ? duration.days() + " Days" : ""
-                }`
-            );
-        };
+  useEffect(() => {
+    const updateDuration = () => {
+      const now = dayjs();
+      const duration = dayjs.duration(now.diff(dayjs(startDate)));
+      setDatePass(
+        `${duration.years()} Years ${duration.months() ? duration.months() + " Months" : ""} ${
+          duration.days() ? duration.days() + " Days" : ""
+        }`
+      );
+    };
 
-        // Update immediately on mount
-        updateDuration();
+    // Update immediately on mount
+    updateDuration();
 
-        // Update every minute
-        const timer = setInterval(updateDuration, 60000);
+    // Update every minute
+    const timer = setInterval(updateDuration, 60000);
 
-        return () => clearInterval(timer);
-    }, []);
+    return () => clearInterval(timer);
+  }, []);
 
-    return (
-        <section id="clock">
-            <div className={"flex justify-center"}>
-                <div
-                    className={`${styles.wrapper} flex flex-col items-center rounded-full w-fit shadow-inner px-9 py-6`}
-                >
-                    <div className={"text-5xl font-bold"}>{datePass}</div>
-                    <Clock />
-                </div>
-            </div>
-        </section>
-    );
+  return (
+    <section id="clock">
+      <div className={"flex justify-center"}>
+        <div
+          className={`${styles.wrapper} flex flex-col items-center rounded-full w-fit shadow-inner px-9 py-6`}
+        >
+          <div className={"text-5xl font-bold"}>{datePass}</div>
+          <Clock />
+        </div>
+      </div>
+    </section>
+  );
 };
