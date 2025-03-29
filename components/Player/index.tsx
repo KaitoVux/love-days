@@ -7,6 +7,7 @@ import { songs } from "../../utils/songs";
 import styles from "./Player.module.scss";
 
 export interface ISong {
+  id: string;
   name: string;
   author: string;
   img: string;
