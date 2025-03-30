@@ -1,51 +1,26 @@
 {
-  "name": "new-love-days",
-  "version": "0.1.0",
+  "name": "love-days",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "build": "npx turbo run build",
+    "dev": "npx turbo run dev",
+    "lint": "npx turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "clean": "npx turbo run clean && rm -rf node_modules",
     "prepare": "husky"
   },
-  "dependencies": {
-    "dayjs": "^1.11.10",
-    "next": "^15.2.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "sharp": "^0.33.5"
-  },
   "devDependencies": {
-    "@types/node": "^20.11.25",
-    "@types/react": "^18.2.64",
-    "@types/react-dom": "^18.2.21",
-    "@typescript-eslint/eslint-plugin": "^8.26.0",
-    "@typescript-eslint/parser": "^8.26.0",
-    "autoprefixer": "^10.4.18",
-    "eslint": "^8.57.0",
-    "eslint-config-next": "^15.2.1",
-    "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-prettier": "^5.2.3",
-    "eslint-plugin-unused-imports": "^4.1.4",
     "husky": "^9.1.7",
-    "lint-staged": "^15.4.3",
-    "postcss": "^8.4.35",
-    "prettier": "^3.5.3",
-    "sass": "^1.71.1",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5.4.2"
+    "lint-staged": "^15.5.0",
+    "prettier": "latest",
+    "turbo": "^2.4.4"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --cache --fix",
-      "prettier --write"
-    ],
-    "*.{json,css,md,yml,yaml}": [
-      "prettier --write"
-    ]
-  }
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "npm@9.8.1"
 }

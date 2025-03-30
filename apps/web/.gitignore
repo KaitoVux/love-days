@@ -6,21 +6,19 @@ node_modules
 .pnp.js
 
 # testing
-**/coverage
+/coverage
 
 # next.js
-**/.next/
-**/out/
+/.next/
+/out/
 
 # production
-**/build
-**/dist
+/build
 
 # misc
 .DS_Store
 *.pem
 .idea
-.turbo
 
 # debug
 npm-debug.log*
@@ -28,11 +26,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env
 .env*.local
-.env.development
-.env.test
-.env.production
 
 # vercel
 .vercel
@@ -48,6 +42,4 @@ next-env.d.ts
 # eslint
 .eslintcache
 
-# Supabase
-**/supabase/.branches
-**/supabase/.temp
+dist
