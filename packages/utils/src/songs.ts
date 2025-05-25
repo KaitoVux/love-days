@@ -1,16 +1,19 @@
 import { ISong } from "./types";
 
-// Supabase storage base URL from environment variables
-const supabaseStorageUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/songs`
-  : "";
-
 // Helper function to create song storage URL
 const createSongUrl = (filename: string): string => {
-  if (!supabaseStorageUrl) {
-    console.error("Supabase URL not configured. Please check your environment variables.");
+  // Check if we're in a browser environment and environment variables are available
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+  if (!supabaseUrl) {
+    // Only log error in development or when explicitly needed
+    if (process.env.NODE_ENV === "development") {
+      console.warn("Supabase URL not configured. Audio files may not load properly.");
+    }
     return "";
   }
+
+  const supabaseStorageUrl = `${supabaseUrl}/storage/v1/object/public/songs`;
   return `${supabaseStorageUrl}/${encodeURIComponent(filename)}`;
 };
 
