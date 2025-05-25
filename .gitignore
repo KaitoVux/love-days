@@ -9,8 +9,8 @@ node_modules
 /coverage
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # production
 /build
@@ -41,5 +41,8 @@ next-env.d.ts
 
 # eslint
 .eslintcache
+
+# turborepo
+.turbo
 
 dist

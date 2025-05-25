@@ -1,25 +1,20 @@
 {
-  "name": "love-days",
+  "name": "@love-days/web",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "npm@10.0.0",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "start": "turbo run start",
-    "lint": "turbo run lint",
-    "lint:fix": "turbo run lint:fix",
-    "format": "turbo run format",
-    "format:check": "turbo run format:check",
-    "type-check": "turbo run type-check",
-    "clean": "turbo run clean",
-    "prepare": "husky"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf .next && rm -rf .turbo"
   },
   "dependencies": {
+    "@love-days/utils": "file:../../packages/utils",
     "dayjs": "^1.11.10",
     "next": "^15.2.1",
     "react": "^19.0.0",
@@ -38,21 +33,10 @@
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-unused-imports": "^4.1.4",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.4.3",
     "postcss": "^8.4.35",
     "prettier": "^3.5.3",
     "sass": "^1.71.1",
     "tailwindcss": "^3.4.1",
-    "turbo": "^2.5.3",
     "typescript": "^5.4.2"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write"
-    ],
-    "*.{json,css,md,yml,yaml}": [
-      "prettier --write"
-    ]
   }
 }

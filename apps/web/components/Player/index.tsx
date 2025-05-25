@@ -3,17 +3,8 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import { FC, useEffect, useRef, useState, useCallback } from "react";
-import { songs } from "../../utils/songs";
+import { songs, ISong } from "@love-days/utils";
 import styles from "./Player.module.scss";
-
-export interface ISong {
-  id: string;
-  name: string;
-  author: string;
-  img: string;
-  audio: string;
-  duration?: string;
-}
 
 export const Player: FC = () => {
   const [currentPlay, setCurrentPlay] = useState<ISong>(songs[0]);

@@ -1,4 +1,4 @@
-import { ISong } from "../components/Player";
+import { ISong } from "./types";
 
 // Supabase storage base URL from environment variables
 const supabaseStorageUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
