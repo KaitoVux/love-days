@@ -1,6 +1,6 @@
 # Next.js UI Theme Refactor Plan
 
-**Created:** 2025-12-25 | **Status:** Planning
+**Created:** 2025-12-25 | **Status:** In Progress (Phase 01 Complete)
 **Goal:** Refactor apps/web to adopt visual design from apps/web-new-ui while keeping Next.js framework
 
 ---
@@ -30,7 +30,7 @@ Migrate Love Days web app from Pages Router to App Router, adopting shadcn/ui co
 
 | Phase | Name                                                       | Priority | Est. Time | Status  |
 | ----- | ---------------------------------------------------------- | -------- | --------- | ------- |
-| 01    | [Foundation Setup](./phase-01-foundation-setup.md)         | Critical | 2-3h      | Pending |
+| 01    | [Foundation Setup](./phase-01-foundation-setup.md)         | Critical | 2-3h      | Done    |
 | 02    | [App Router Migration](./phase-02-app-router-migration.md) | Critical | 2-3h      | Pending |
 | 03    | [Theme System](./phase-03-theme-system.md)                 | High     | 1-2h      | Pending |
 | 04    | [Component Refactor](./phase-04-component-refactor.md)     | High     | 3-4h      | Pending |
@@ -53,12 +53,14 @@ Migrate Love Days web app from Pages Router to App Router, adopting shadcn/ui co
 
 ## Progress Tracking
 
-- [ ] Phase 01: Foundation Setup
+- [x] Phase 01: Foundation Setup (2025-12-26)
 - [ ] Phase 02: App Router Migration
 - [ ] Phase 03: Theme System
 - [ ] Phase 04: Component Refactor
 - [ ] Phase 05: Music Player
 - [ ] Phase 06: Testing & Polish
+
+**Progress:** 16.7% (1/6 phases complete)
 
 ---
 
