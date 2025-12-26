@@ -12,8 +12,9 @@
 | --------- | ---------- |
 | Date      | 2025-12-25 |
 | Priority  | High       |
-| Status    | Pending    |
+| Status    | Done       |
 | Est. Time | 1-2 hours  |
+| Completed | 2025-12-26 17:13 |
 
 Finalize HSL color system, add custom fonts, configure animations, update SCSS variables to use CSS custom properties bridge.
 
@@ -334,13 +335,13 @@ npm run build
 
 ## Todo List
 
-- [ ] Complete CSS variables in globals.scss
-- [ ] Update \_variables.scss with CSS var bridge
-- [ ] Add animation keyframes
-- [ ] Add utility classes
-- [ ] Audit component SCSS for hardcoded colors
-- [ ] Verify theme renders correctly
-- [ ] Run type-check, lint, build
+- [x] Complete CSS variables in globals.scss
+- [x] Update \_variables.scss with CSS var bridge
+- [x] Add animation keyframes
+- [x] Add utility classes
+- [x] Audit component SCSS for hardcoded colors
+- [x] Verify theme renders correctly
+- [x] Run type-check, lint, build
 
 ---
 
