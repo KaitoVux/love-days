@@ -1,9 +1,10 @@
 # System Architecture Documentation
 
-**Version**: 1.1
+**Version**: 1.2
 **Last Updated**: 2025-12-26
 **Architecture Pattern**: Layered + Component-Based
 **Current Router**: App Router (migrated Phase 02)
+**Component System**: Modular LoveDays Components (Phase 04 ✅)
 
 ## High-Level Architecture
 
@@ -74,22 +75,39 @@ Located in `components/` by feature:
 
 ```
 components/
+├── LoveDays/                    # Main feature (Phase 04 ✅)
+│   ├── Title.tsx               # Main title with hearts
+│   ├── ProfileSection.tsx       # Profile images & names
+│   ├── CountUp.tsx             # Days counter + clock
+│   ├── Footer.tsx              # Footer text
+│   ├── FloatingHearts.tsx       # Background animation
+│   └── index.ts                # Barrel export
 ├── Player/
-│   ├── index.tsx         # Main player component
-│   ├── controls.tsx      # Play/pause/skip
-│   ├── progress.tsx      # Progress bar
+│   ├── index.tsx               # Main player component
+│   ├── controls.tsx            # Play/pause/skip
+│   ├── progress.tsx            # Progress bar
 │   └── Player.module.scss
-├── Header/
-├── Footer/
 └── [Feature]/
 ```
+
+**LoveDays Component Details** (Phase 04):
+
+| Component      | Type   | Purpose                    | Styling  |
+| -------------- | ------ | -------------------------- | -------- |
+| Title          | Server | Main title with hearts     | Tailwind |
+| ProfileSection | Server | Profile images & names     | Tailwind |
+| CountUp        | Client | Days counter + clock       | Tailwind |
+| Footer         | Server | Footer with heart icon     | Tailwind |
+| FloatingHearts | Client | Animated background hearts | Tailwind |
 
 **Characteristics**:
 
 - Feature-organized
-- Own state management (useState for now)
-- Uses @love-days/utils for data
-- Scoped styles with CSS Modules
+- Tailwind-first styling (no CSS Modules)
+- Own state management (useState for client components)
+- Uses @love-days/utils for date calculations
+- Server/client separation for performance
+- Responsive design (xs/md/lg breakpoints)
 
 #### UI Components (shadcn/ui)
 
@@ -640,16 +658,16 @@ npm workspaces
 
 ## Technology Justification
 
-| Technology   | Why?                    | Alternative      | Trade-off                  |
-| ------------ | ----------------------- | ---------------- | -------------------------- |
-| Next.js 15   | Unified React framework | Create React App | More opinionated           |
-| App Router   | Server/client components| Pages Router     | Learning curve (now active)|
-| TypeScript   | Type safety             | JavaScript       | Compile step               |
-| Tailwind     | Utility-first CSS       | CSS-in-JS        | Class string overhead      |
-| Sass         | CSS preprocessing       | PostCSS          | Extra build step           |
-| shadcn/ui    | Headless components     | Material UI      | More control needed        |
-| Supabase     | Managed backend         | Firebase         | Self-hosted option         |
-| Turborepo    | Fast monorepo builds    | Lerna            | Learning curve             |
+| Technology | Why?                     | Alternative      | Trade-off                   |
+| ---------- | ------------------------ | ---------------- | --------------------------- |
+| Next.js 15 | Unified React framework  | Create React App | More opinionated            |
+| App Router | Server/client components | Pages Router     | Learning curve (now active) |
+| TypeScript | Type safety              | JavaScript       | Compile step                |
+| Tailwind   | Utility-first CSS        | CSS-in-JS        | Class string overhead       |
+| Sass       | CSS preprocessing        | PostCSS          | Extra build step            |
+| shadcn/ui  | Headless components      | Material UI      | More control needed         |
+| Supabase   | Managed backend          | Firebase         | Self-hosted option          |
+| Turborepo  | Fast monorepo builds     | Lerna            | Learning curve              |
 
 ## Known Limitations
 
