@@ -34,7 +34,7 @@ Migrate Love Days web app from Pages Router to App Router, adopting shadcn/ui co
 | 02    | [App Router Migration](./phase-02-app-router-migration.md) | Critical | 2-3h      | Done    |
 | 03    | [Theme System](./phase-03-theme-system.md)                 | High     | 1-2h      | Done    |
 | 04    | [Component Refactor](./phase-04-component-refactor.md)     | High     | 3-4h      | Done    |
-| 05    | [Music Player](./phase-05-music-player.md)                 | Critical | 3-4h      | Pending |
+| 05    | [Music Player](./phase-05-music-player.md)                 | Critical | 3-4h      | Done    |
 | 06    | [Testing & Polish](./phase-06-testing-polish.md)           | Medium   | 2-3h      | Pending |
 
 **Total Estimated Time:** 13-19 hours
@@ -57,10 +57,10 @@ Migrate Love Days web app from Pages Router to App Router, adopting shadcn/ui co
 - [x] Phase 02: App Router Migration (2025-12-26)
 - [x] Phase 03: Theme System (2025-12-26)
 - [x] Phase 04: Component Refactor (2025-12-26)
-- [ ] Phase 05: Music Player
+- [x] Phase 05: Music Player (2025-12-26)
 - [ ] Phase 06: Testing & Polish
 
-**Progress:** 66.7% (4/6 phases complete) - Last update: 2025-12-26 (Phase 04 DONE at 2025-12-26)
+**Progress:** 83.3% (5/6 phases complete) - Last update: 2025-12-26 (Phase 05 DONE at 2025-12-26)
 
 ---
 
