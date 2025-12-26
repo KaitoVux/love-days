@@ -1,10 +1,11 @@
 # System Architecture Documentation
 
-**Version**: 1.2
+**Version**: 1.3
 **Last Updated**: 2025-12-26
 **Architecture Pattern**: Layered + Component-Based
-**Current Router**: App Router (migrated Phase 02)
+**Current Router**: App Router (migrated Phase 02 ✅)
 **Component System**: Modular LoveDays Components (Phase 04 ✅)
+**Audio Player**: MusicSidebar with HTML5 API (Phase 05 ✅)
 
 ## High-Level Architecture
 
@@ -81,24 +82,30 @@ components/
 │   ├── CountUp.tsx             # Days counter + clock
 │   ├── Footer.tsx              # Footer text
 │   ├── FloatingHearts.tsx       # Background animation
+│   ├── MusicSidebar.tsx         # Music player (Phase 05 ✅)
 │   └── index.ts                # Barrel export
-├── Player/
-│   ├── index.tsx               # Main player component
-│   ├── controls.tsx            # Play/pause/skip
-│   ├── progress.tsx            # Progress bar
-│   └── Player.module.scss
+├── ui/                          # shadcn/ui components
+│   ├── slider.tsx              # Progress/volume slider (Phase 05 ✅)
+│   └── [other-components]/
 └── [Feature]/
 ```
 
-**LoveDays Component Details** (Phase 04):
+**LoveDays Component Details** (Phase 04-05):
 
-| Component      | Type   | Purpose                    | Styling  |
-| -------------- | ------ | -------------------------- | -------- |
-| Title          | Server | Main title with hearts     | Tailwind |
-| ProfileSection | Server | Profile images & names     | Tailwind |
-| CountUp        | Client | Days counter + clock       | Tailwind |
-| Footer         | Server | Footer with heart icon     | Tailwind |
-| FloatingHearts | Client | Animated background hearts | Tailwind |
+| Component      | Type   | Purpose                    | Styling  | Phase |
+| -------------- | ------ | -------------------------- | -------- | ----- |
+| Title          | Server | Main title with hearts     | Tailwind | 04    |
+| ProfileSection | Server | Profile images & names     | Tailwind | 04    |
+| CountUp        | Client | Days counter + clock       | Tailwind | 04    |
+| Footer         | Server | Footer with heart icon     | Tailwind | 04    |
+| FloatingHearts | Client | Animated background hearts | Tailwind | 04    |
+| MusicSidebar   | Client | Full-featured audio player | Tailwind | 05    |
+
+**UI Components** (Phase 05):
+
+| Component | Purpose            | Base             |
+| --------- | ------------------ | ---------------- |
+| Slider    | Progress/volume    | Radix UI slider  |
 
 **Characteristics**:
 
