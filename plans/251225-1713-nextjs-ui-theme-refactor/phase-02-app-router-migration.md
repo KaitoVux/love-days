@@ -8,12 +8,12 @@
 
 ## Overview
 
-| Field     | Value      |
-| --------- | ---------- |
-| Date      | 2025-12-25 |
-| Priority  | Critical   |
-| Status    | Pending    |
-| Est. Time | 2-3 hours  |
+| Field     | Value           |
+| --------- | --------------- |
+| Date      | 2025-12-26      |
+| Priority  | Critical        |
+| Status    | DONE (2025-12-26 17:30 UTC) |
+| Est. Time | 2-3 hours       |
 
 Create `app/` directory structure, migrate from Pages Router to App Router. Single-page app simplifies migration - only home page needs conversion.
 
@@ -251,14 +251,14 @@ rmdir apps/web/pages
 
 ## Todo List
 
-- [ ] Create app/ directory
-- [ ] Create app/layout.tsx with metadata
-- [ ] Create app/page.tsx with existing components
-- [ ] Verify dev server works
-- [ ] Verify static export generates correctly
-- [ ] Remove pages/index.tsx
-- [ ] Remove pages/\_app.tsx
-- [ ] Run type-check, lint, build
+- [x] Create app/ directory
+- [x] Create app/layout.tsx with metadata
+- [x] Create app/page.tsx with existing components
+- [x] Verify dev server works
+- [x] Verify static export generates correctly
+- [x] Remove pages/index.tsx
+- [x] Remove pages/\_app.tsx
+- [x] Run type-check, lint, build
 
 ---
 

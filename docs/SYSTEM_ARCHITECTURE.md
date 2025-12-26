@@ -1,9 +1,9 @@
 # System Architecture Documentation
 
-**Version**: 1.0
+**Version**: 1.1
 **Last Updated**: 2025-12-26
 **Architecture Pattern**: Layered + Component-Based
-**Current Router**: Pages Router (App Router prepared)
+**Current Router**: App Router (migrated Phase 02)
 
 ## High-Level Architecture
 
@@ -11,8 +11,8 @@
 ┌─────────────────────────────────────────────────────┐
 │         Next.js Application (apps/web)              │
 ├─────────────────────────────────────────────────────┤
-│                 Pages Layer                         │
-│         (pages/, App Router ready)                  │
+│                 Routing Layer                       │
+│         (app/, App Router - Phase 02)               │
 ├─────────────────────────────────────────────────────┤
 │            Component Layer                          │
 │  ┌──────────────┐  ┌──────────────┐                │
@@ -44,24 +44,27 @@
 
 ## Layer Descriptions
 
-### 1. Pages Layer (Routing)
+### 1. Routing Layer
 
-**Current**: Pages Router
-**Future**: App Router (Phase 02)
+**Current**: App Router (Phase 02 ✅)
+**Previous**: Pages Router (deprecated)
 
 ```
-pages/
-├── _app.tsx              # App wrapper, global state
-├── _document.tsx         # HTML document wrapper
-├── index.tsx             # Home page
+app/
+├── layout.tsx            # Root layout (html, body, metadata)
+├── page.tsx              # Home page
 └── api/                  # API routes (future)
+
+pages/                     # Legacy (empty, kept for API routes)
 ```
 
 **Characteristics**:
 
 - File-based routing (filename = route)
+- Server components by default
+- Metadata API for document head
 - Static export compatible
-- Incremental adoption path for App Router
+- Client components marked with `'use client'`
 
 ### 2. Component Layer
 
@@ -308,18 +311,29 @@ apps/web/
 ### Page Load Sequence
 
 ```
-1. User visits app
+1. Build time (App Router)
+   ├─ app/layout.tsx renders (server component)
+   ├─ app/page.tsx renders (server component)
+   ├─ Metadata API applied to document head
+   └─ Static HTML generated → out/index.html
+
+2. User visits app
    ├─ Browser loads HTML (out/index.html)
    ├─ Browser loads JS chunks (out/_next/static/)
    ├─ Browser loads CSS (out/_next/css/)
-   └─ React hydrates
+   └─ React hydrates client components
 
-2. Player component mounts
+3. Client components mount
+   ├─ Player (client component, 'use client')
+   ├─ CountUp (client component, 'use client')
+   └─ Other interactive elements
+
+4. Player component initialization
    ├─ Imports songs from @love-days/utils
    ├─ Renders playlist
    └─ Audio <audio/> elements with Supabase URLs
 
-3. User plays song
+5. User plays song
    ├─ Browser requests audio from Supabase CDN
    ├─ Audio streams from public bucket
    └─ Player displays UI state
@@ -328,31 +342,38 @@ apps/web/
 ### Component Communication
 
 ```
-_app.tsx (Page wrapper)
+app/layout.tsx (Root layout - Server)
 │
-└─ Layout/Header
+└─ app/page.tsx (Home page - Server)
    │
-   ├─ Player (main component)
-   │  ├─ useState(currentSong)
-   │  ├─ useState(isPlaying)
-   │  │
-   │  ├─ Controls
-   │  │  ├─ Button (prev)
-   │  │  ├─ Button (play/pause)
-   │  │  └─ Button (next)
-   │  │
-   │  ├─ Progress
-   │  │ └─ Slider
-   │  │
-   │  └─ Playlist
-   │     └─ SongItem (click to play)
-   │
-   └─ Footer
+   └─ MainLayout (Server component wrapper)
+      │
+      ├─ MainTitle (Server)
+      ├─ CountUp (Client, 'use client')
+      ├─ MainSection (Server)
+      ├─ Footer (Server)
+      │
+      └─ Player (Client, 'use client' - main component)
+         ├─ useState(currentSong)
+         ├─ useState(isPlaying)
+         │
+         ├─ Controls (Client)
+         │  ├─ Button (prev)
+         │  ├─ Button (play/pause)
+         │  └─ Button (next)
+         │
+         ├─ Progress (Client)
+         │ └─ Slider
+         │
+         └─ Playlist (Client)
+            └─ SongItem (click to play)
 ```
 
-**State Management**: Component-local (useState) in Phase 01
-**Context API**: Available for Phase 02+
-**Global State**: Planned for Phase 03
+**State Management**: Component-local (useState)
+**Server Components**: Static content rendered at build time
+**Client Components**: Interactive elements hydrated in browser
+**Context API**: Available for future state sharing
+**Global State**: Planned for Phase 03+
 
 ## Design System Architecture
 
@@ -595,12 +616,13 @@ npm workspaces
 
 ## Extension Points (Future)
 
-### Phase 02: App Router Migration
+### Phase 02: App Router Migration ✅ COMPLETE
 
-- New `app/` directory structure
-- Route groups for layouts
-- Server/client component boundaries
-- Streaming + Suspense support
+- ✅ New `app/` directory structure
+- ✅ Root layout with metadata API
+- ✅ Server/client component boundaries
+- ✅ Static export preserved
+- Future: Route groups for layouts, Streaming + Suspense support
 
 ### Phase 03: Component System
 
@@ -620,8 +642,8 @@ npm workspaces
 
 | Technology   | Why?                    | Alternative      | Trade-off                  |
 | ------------ | ----------------------- | ---------------- | -------------------------- |
-| Next.js      | Unified React framework | Create React App | More opinionated           |
-| Pages Router | Static export support   | App Router       | No App Router features yet |
+| Next.js 15   | Unified React framework | Create React App | More opinionated           |
+| App Router   | Server/client components| Pages Router     | Learning curve (now active)|
 | TypeScript   | Type safety             | JavaScript       | Compile step               |
 | Tailwind     | Utility-first CSS       | CSS-in-JS        | Class string overhead      |
 | Sass         | CSS preprocessing       | PostCSS          | Extra build step           |
@@ -631,31 +653,36 @@ npm workspaces
 
 ## Known Limitations
 
-1. **Static Data**: Songs hardcoded in code
-2. **No Real-time**: Updates require rebuild
-3. **No Auth**: No user accounts yet
-4. **No Database**: Storage-only approach
-5. **No Offline**: No service worker
-6. **Mobile UI**: Responsive but not optimized for touch
+1. **Static Data**: Songs hardcoded in code (Phase 01/02)
+2. **No Real-time**: Updates require rebuild (Phase 03+)
+3. **No Auth**: No user accounts yet (Phase 04+)
+4. **No Database**: Storage-only approach (Phase 04+)
+5. **No Offline**: No service worker (Phase 05+)
+6. **Mobile UI**: Responsive but not touch-optimized (Phase 03+)
+7. **Dark Mode**: Not yet implemented (Phase 03)
 
 ## Roadmap Integration
 
 ```
 Phase 01: Foundation Setup ✅
+ ├─ Status: Complete
+ ├─ shadcn/ui setup, theme system, TypeScript paths
  └─ Next Phase: Phase 02
 
-Phase 02: App Router Migration 📋
- ├─ Duration: 2-3 weeks
- ├─ Blockers: None
+Phase 02: App Router Migration ✅
+ ├─ Status: Complete (2025-12-26)
+ ├─ App Router, metadata API, static export verified
  └─ Next Phase: Phase 03
 
 Phase 03: Component System 📋
  ├─ Duration: 3-4 weeks
- ├─ Blockers: Phase 02 complete
+ ├─ Blockers: None (Phase 02 complete)
+ ├─ Content: Theme refinement, dark mode, shadcn components
  └─ Next Phase: Phase 04
 
 Phase 04: Advanced Features 📋
  ├─ Duration: Ongoing
+ ├─ Content: Auth, database, real-time
  └─ Priority: User feedback
 ```
 

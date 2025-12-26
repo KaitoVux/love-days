@@ -1,9 +1,9 @@
 # Love Days - Project Overview
 
-**Version**: 1.0
+**Version**: 1.1
 **Last Updated**: 2025-12-26
 **Tech Stack**: Next.js 15, React 19, TypeScript 5.4, Turborepo, Tailwind CSS, Supabase
-**Status**: Active Development (Phase 01 Complete - Theme Foundation Ready)
+**Status**: Active Development (Phase 02 Complete - App Router Migrated)
 
 ## Quick Summary
 
@@ -47,25 +47,29 @@ love-days/
 
 ```
 apps/web/
-├── pages/                # Pages Router (not App Router yet)
-│   ├── _app.tsx
-│   ├── _document.tsx
-│   ├── index.tsx
-│   └── [dynamic routes]
-├── app/                  # App Router (prepared, not yet in use)
+├── app/                  # App Router (active, Phase 02 ✅)
+│   ├── layout.tsx        # Root layout with metadata API
+│   └── page.tsx          # Home page
+├── pages/                # Legacy (empty, kept for future API routes)
 ├── components/
-│   ├── Player/           # Main audio player
-│   ├── ui/               # shadcn/ui components (empty, ready for install)
-│   └── [feature]/        # Feature-specific components
+│   ├── Player/           # Main audio player (client component)
+│   ├── CountUp/          # Counter component (client component)
+│   ├── Title/            # Title component
+│   ├── Footer/           # Footer component
+│   ├── MainSection/      # Main content
+│   ├── ui/               # shadcn/ui components (ready to install)
+│   └── [feature]/        # Other feature-specific components
+├── layouts/
+│   └── MainLayout.tsx    # Wrapper layout component
 ├── lib/
-│   └── utils.ts          # Shared utilities (cn() for className)
+│   └── utils.ts          # cn() for className merging
 ├── styles/
-│   ├── globals.scss      # Global styles + CSS variables
-│   └── [module].scss     # Component styles
-├── public/               # Static assets
-├── next.config.js        # Next.js config (static export)
+│   ├── globals.scss      # Global styles + CSS variables (HSL theme)
+│   └── [module].scss     # Component-scoped styles
+├── public/               # Static assets (favicon, images)
+├── next.config.js        # Next.js config (static export enabled)
 ├── tailwind.config.ts    # Tailwind configuration (TypeScript)
-├── tsconfig.json         # TypeScript config with path aliases
+├── tsconfig.json         # TypeScript config with path aliases (@/)
 └── package.json          # App-specific dependencies
 
 packages/utils/
@@ -286,13 +290,23 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 - @lib/\* path alias
 - UI component structure
 
-### Phase 02: App Router Migration (PLANNED)
+### Phase 02: App Router Migration ✅ COMPLETE
 
-- Create app/ directory
-- Migrate root layout
-- Implement route groups
-- Server/client boundaries
-- Incremental adoption
+✅ **Completed 2025-12-26**:
+- App Router directory created
+- Root layout with metadata API implemented
+- Home page migrated (app/page.tsx)
+- Metadata API replaces Head component
+- Static export verified working
+- All functionality preserved
+- Type safety verified (strict mode passes)
+
+**Deliverables**:
+- New app/layout.tsx with Metadata API
+- New app/page.tsx using existing components
+- Pages Router files deprecated
+- Static export to out/index.html
+- 50+ lines added, full compatibility maintained
 
 ### Phase 03: Component System (PLANNED)
 
