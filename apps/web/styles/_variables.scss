@@ -1,3 +1,21 @@
+// CSS Custom Properties Bridge
+// These map to Tailwind theme colors defined in globals.scss
+
+$primary: hsl(var(--primary));
+$primary-foreground: hsl(var(--primary-foreground));
+$secondary: hsl(var(--secondary));
+$secondary-foreground: hsl(var(--secondary-foreground));
+$background: hsl(var(--background));
+$foreground: hsl(var(--foreground));
+$muted: hsl(var(--muted));
+$muted-foreground: hsl(var(--muted-foreground));
+$accent: hsl(var(--accent));
+$card: hsl(var(--card));
+$border: hsl(var(--border));
+
+// Border radius
+$radius: var(--radius);
+
+// Legacy (for backward compat during migration)
 $black: #000000;
-$primary: #ec407a;
-$secondary: #b90d46;
+$white: #ffffff;

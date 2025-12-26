@@ -53,6 +53,57 @@
   }
 }
 
+/* Animation keyframes */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes heartbeat {
+  0%,
+  40%,
+  80%,
+  100% {
+    transform: scale(0.75);
+  }
+  20%,
+  60% {
+    transform: scale(1);
+  }
+}
+
 @layer utilities {
   .font-display {
     font-family: "Playfair Display", serif;
@@ -73,6 +124,18 @@
   }
   .glow-primary {
     box-shadow: 0 0 40px hsl(350 80% 65% / 0.3);
+  }
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  .animate-float-up {
+    animation: float-up linear infinite;
+  }
+  .animate-heartbeat {
+    animation: heartbeat 4s linear infinite;
   }
 }
 
