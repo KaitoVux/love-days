@@ -1,26 +1,15 @@
-import { Footer } from "@/components/Footer";
-import { MainSection } from "@/components/MainSection";
-import { Player } from "@/components/Player";
-import { MainTitle } from "@/components/Title";
-import { CountUp } from "@/components/CountUp";
-import { MainLayout } from "@/layouts/MainLayout";
+import { Title, ProfileSection, CountUp, Footer, FloatingHearts } from "@/components/LoveDays";
 
 export default function Home() {
   return (
-    <section id="main" className="min-h-screen">
-      <MainLayout>
-        <div className="grid md:grid-cols-3 xs:grid-cols-1 lg:gap-3 md:gap-2">
-          <div className="md:col-span-2">
-            <MainTitle />
-            <CountUp />
-            <MainSection />
-            <Footer />
-          </div>
-          <div className="mx-auto pt-16">
-            <Player />
-          </div>
-        </div>
-      </MainLayout>
-    </section>
+    <div className="min-h-[100svh] flex flex-col overflow-x-hidden relative">
+      <FloatingHearts />
+      <main className="flex-1 container mx-auto px-4 pt-4 pb-16 md:pt-6 md:pb-20 flex flex-col items-center justify-center gap-4 md:gap-5 relative z-10">
+        <Title />
+        <ProfileSection />
+        <CountUp />
+      </main>
+      <Footer />
+    </div>
   );
 }

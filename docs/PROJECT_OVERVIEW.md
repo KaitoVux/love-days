@@ -1,9 +1,9 @@
 # Love Days - Project Overview
 
-**Version**: 1.1
+**Version**: 1.2
 **Last Updated**: 2025-12-26
 **Tech Stack**: Next.js 15, React 19, TypeScript 5.4, Turborepo, Tailwind CSS, Supabase
-**Status**: Active Development (Phase 02 Complete - App Router Migrated)
+**Status**: Active Development (Phase 04 Complete - Component Refactor Done)
 
 ## Quick Summary
 
@@ -49,23 +49,24 @@ love-days/
 apps/web/
 ├── app/                  # App Router (active, Phase 02 ✅)
 │   ├── layout.tsx        # Root layout with metadata API
-│   └── page.tsx          # Home page
+│   └── page.tsx          # Home page (updated Phase 04)
 ├── pages/                # Legacy (empty, kept for future API routes)
 ├── components/
+│   ├── LoveDays/         # Main feature components (Phase 04 ✅)
+│   │   ├── Title.tsx     # Main title with hearts
+│   │   ├── ProfileSection.tsx  # Profile images & names
+│   │   ├── CountUp.tsx   # Days counter + clock
+│   │   ├── Footer.tsx    # Footer text
+│   │   ├── FloatingHearts.tsx  # Background animation
+│   │   └── index.ts      # Barrel export
 │   ├── Player/           # Main audio player (client component)
-│   ├── CountUp/          # Counter component (client component)
-│   ├── Title/            # Title component
-│   ├── Footer/           # Footer component
-│   ├── MainSection/      # Main content
 │   ├── ui/               # shadcn/ui components (ready to install)
 │   └── [feature]/        # Other feature-specific components
-├── layouts/
-│   └── MainLayout.tsx    # Wrapper layout component
 ├── lib/
 │   └── utils.ts          # cn() for className merging
 ├── styles/
 │   ├── globals.scss      # Global styles + CSS variables (HSL theme)
-│   └── [module].scss     # Component-scoped styles
+│   └── [module].scss     # Component-scoped styles (legacy)
 ├── public/               # Static assets (favicon, images)
 ├── next.config.js        # Next.js config (static export enabled)
 ├── tailwind.config.ts    # Tailwind configuration (TypeScript)
@@ -293,6 +294,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ### Phase 02: App Router Migration ✅ COMPLETE
 
 ✅ **Completed 2025-12-26**:
+
 - App Router directory created
 - Root layout with metadata API implemented
 - Home page migrated (app/page.tsx)
@@ -302,21 +304,55 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 - Type safety verified (strict mode passes)
 
 **Deliverables**:
+
 - New app/layout.tsx with Metadata API
 - New app/page.tsx using existing components
 - Pages Router files deprecated
 - Static export to out/index.html
 - 50+ lines added, full compatibility maintained
 
-### Phase 03: Component System (PLANNED)
+### Phase 03: Theme System & Animations ✅ COMPLETE
 
-- Install shadcn/ui components
-- Create feature components
-- Implement compositions
-- Document component API
-- Storybook setup
+✅ **Completed 2025-12-25**:
 
-### Phase 04: Advanced Features (PLANNED)
+- Tailwind animations configured (fade-in, pulse-slow, float, float-up)
+- CSS Keyframe animations defined
+- Custom animation classes in globals.scss
+- Animation delays and durations optimized
+
+**Deliverables**:
+
+- Updated tailwind.config.ts with animations
+- Enhanced globals.scss with animation definitions
+- Responsive animation timing
+
+### Phase 04: Component Refactor ✅ COMPLETE
+
+✅ **Completed 2025-12-26**:
+
+- 5 new components created (Title, ProfileSection, CountUp, Footer, FloatingHearts)
+- Tailwind-first styling approach implemented
+- lucide-react icons integrated
+- Server/client component separation
+- Responsive design (xs/md/lg breakpoints)
+- Barrel exports for clean imports
+- Animation staggering implemented
+
+**Deliverables**:
+
+- components/LoveDays/ directory with 5 components
+- app/page.tsx updated with new component layout
+- Hydration-safe patterns applied
+- All build checks passing (type-check, lint, build)
+
+### Phase 05: Music Player Integration (PLANNED)
+
+- Integrate existing Player component
+- Add sidebar with controls
+- Test audio playback
+- Responsive layout tuning
+
+### Phase 06: Advanced Features (PLANNED)
 
 - User authentication
 - Playlist management
