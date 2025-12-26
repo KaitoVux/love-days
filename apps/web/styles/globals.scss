@@ -1,77 +1,95 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&family=Nunito:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap");
+@layer base {
+  :root {
+    --background: 350 30% 8%;
+    --foreground: 350 20% 95%;
+    --card: 350 25% 12%;
+    --card-foreground: 350 20% 95%;
+    --popover: 350 25% 12%;
+    --popover-foreground: 350 20% 95%;
+    --primary: 350 80% 65%;
+    --primary-foreground: 350 20% 98%;
+    --secondary: 350 30% 18%;
+    --secondary-foreground: 350 20% 95%;
+    --muted: 350 20% 20%;
+    --muted-foreground: 350 15% 65%;
+    --accent: 350 60% 50%;
+    --accent-foreground: 350 20% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 350 25% 20%;
+    --input: 350 25% 20%;
+    --ring: 350 80% 65%;
+    --radius: 1rem;
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    Segoe UI,
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    Fira Sans,
-    Droid Sans,
-    Helvetica Neue,
-    sans-serif;
-  background: #ee9ca7; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #ffdde1, #ee9ca7); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #ffdde1,
-    #ee9ca7
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-  background-repeat: no-repeat;
-  background-size: cover;
-  font-size: 62.5%;
-  font-family: "Dancing Script", cursive;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
+    --sidebar-background: 350 30% 10%;
+    --sidebar-foreground: 350 20% 95%;
+    --sidebar-primary: 350 80% 65%;
+    --sidebar-primary-foreground: 350 20% 98%;
+    --sidebar-accent: 350 30% 18%;
+    --sidebar-accent-foreground: 350 20% 95%;
+    --sidebar-border: 350 25% 20%;
   }
 
-  to {
-    transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    background-image:
+      radial-gradient(ellipse at top, hsl(350 80% 65% / 0.08), transparent 50%),
+      radial-gradient(
+        ellipse at bottom,
+        hsl(320 70% 50% / 0.05),
+        transparent 50%
+      );
+    min-height: 100vh;
   }
 }
 
-/* width */
+@layer utilities {
+  .font-display {
+    font-family: "Playfair Display", serif;
+  }
+  .font-body {
+    font-family: "Cormorant Garamond", serif;
+  }
+  .font-sans-clean {
+    font-family: "Nunito", sans-serif;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      135deg,
+      hsl(350 80% 70%),
+      hsl(320 70% 60%)
+    );
+  }
+  .glow-primary {
+    box-shadow: 0 0 40px hsl(350 80% 65% / 0.3);
+  }
+}
+
+/* Custom scrollbar styling */
 ::-webkit-scrollbar {
   width: 5px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #ec407a;
+  background: hsl(var(--primary));
   border-radius: 5px;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #ec407a;
+  background: hsl(var(--primary));
 }
