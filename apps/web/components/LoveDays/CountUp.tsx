@@ -11,7 +11,7 @@ dayjs.extend(relativeTime);
 
 const TimeUnit = ({ value, label }: { value: number; label: string }) => (
   <div className="flex flex-col items-center p-3 md:p-4 bg-card/40 backdrop-blur-md rounded-xl border border-primary/20 shadow-[0_0_15px_rgba(255,182,193,0.15)] min-w-[80px] md:min-w-[100px] animate-fade-in hover:scale-105 transition-transform duration-300">
-    <span className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-gradient drop-shadow-sm">
+    <span className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-primary drop-shadow-sm">
       {String(value).padStart(2, "0")}
     </span>
     <span className="text-xs md:text-sm font-body text-muted-foreground uppercase tracking-widest mt-1">
