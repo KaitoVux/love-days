@@ -2,9 +2,10 @@
 
 **Plan ID**: 2025-12-29-nestjs-backend-songs-images
 **Created**: 2025-12-29
-**Status**: Planning Complete
+**Status**: 75% Complete (3 of 4 phases done)
 **Priority**: High
 **Source**: [Brainstorm Report](../reports/brainstorm-2025-12-29-nestjs-backend-songs-images.md)
+**Last Updated**: 2025-12-29 14:30 UTC
 
 ---
 
@@ -70,8 +71,8 @@ Implement NestJS backend API on Vercel serverless with Supabase integration, sha
 | ----- | ------------------------------------------------------------------------------ | -------- | ----------- | ------------ | --------------- |
 | 1     | [NestJS Backend Foundation](./phase-01-nestjs-backend-foundation.md)           | Week 1   | DONE        | None         | 2025-12-29      |
 | 2     | [Presigned URL File Upload](./phase-02-presigned-url-file-upload.md)           | Week 2   | DONE        | Phase 1      | 2025-12-29      |
-| 3     | [Admin UI (shadcn Dashboard)](./phase-03-admin-ui-shadcn-dashboard.md)         | Week 3   | In Progress | Phase 2      | 2025-12-31 ETA  |
-| 4     | [Frontend Integration & Webhooks](./phase-04-frontend-integration-webhooks.md) | Week 3-4 | Pending     | Phase 3      | 2026-01-05 ETA  |
+| 3     | [Admin UI (shadcn Dashboard)](./phase-03-admin-ui-shadcn-dashboard.md)         | Week 3   | DONE        | Phase 2      | 2025-12-29      |
+| 4     | [Frontend Integration & Webhooks](./phase-04-frontend-integration-webhooks.md) | Week 3-4 | In Progress | Phase 3      | 2026-01-05 ETA  |
 
 **Total Estimated Duration**: 2-3 weeks (accelerated: both Phase 1&2 done in week 1)
 
@@ -288,6 +289,7 @@ NEXT_PUBLIC_API_URL=https://love-days-api.vercel.app  # NEW
 
 | Date       | Change                                                                                                                                                                    |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2025-12-29 | Phase 3 marked DONE: Admin UI (shadcn Dashboard) complete with full CRUD, file upload, authentication, settings/rebuild. Code review passed with 0 critical issues        |
 | 2025-12-29 | Phase 2 marked DONE: Presigned URL file upload complete with security hardening, MIME validation, env checks, shared DTOs, all quality issues resolved, all tests passing |
 | 2025-12-29 | Phase 1 marked DONE: NestJS backend foundation complete with Prisma, Supabase auth, CRUD endpoints, Swagger docs, all tests passed                                        |
 | 2025-12-29 | Initial plan created from brainstorm report                                                                                                                               |
