@@ -21,6 +21,7 @@ const TimeUnit = ({ value, label }: { value: number; label: string }) => (
 );
 
 const CountUp = () => {
+  const [mounted, setMounted] = useState(false);
   const [timeDiff, setTimeDiff] = useState({
     years: 0,
     months: 0,
@@ -34,6 +35,7 @@ const CountUp = () => {
   const startDate = "2020-08-22T00:00:00";
 
   useEffect(() => {
+    setMounted(true);
     const updateTime = () => {
       const start = dayjs(startDate);
       const now = dayjs();
@@ -54,6 +56,22 @@ const CountUp = () => {
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  if (!mounted) {
+    return (
+      <div className="flex flex-col items-center gap-8 w-full max-w-5xl mx-auto py-8">
+        <div className="flex flex-col items-center animate-fade-in gap-2">
+          <p className="text-sm md:text-lg text-muted-foreground font-body tracking-wider">
+            Together since <span className="text-primary font-bold">August 22, 2020</span>
+          </p>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-foreground flex items-center gap-3">
+            <span className="text-primary">Loading...</span>
+            <span className="animate-heartbeat text-red-500">💕</span>
+          </h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center gap-8 w-full max-w-5xl mx-auto py-8">
