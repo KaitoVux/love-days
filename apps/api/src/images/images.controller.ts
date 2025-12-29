@@ -14,16 +14,30 @@ import {
   ApiOperation,
   ApiBearerAuth,
   ApiQuery,
+  ApiResponse,
 } from '@nestjs/swagger';
 import { ImagesService } from './images.service';
 import { CreateImageDto } from './dto/create-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
+import { ImageUploadUrlDto } from './dto/upload-url.dto';
+import { UploadUrlResponseDto } from '../storage/dto/upload-url-response.dto';
 import { SupabaseAuthGuard } from '../auth/auth.guard';
 
 @ApiTags('images')
 @Controller('api/v1/images')
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
+
+  @Post('upload-url')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Generate presigned upload URL for image file' })
+  @ApiResponse({ status: 201, type: UploadUrlResponseDto })
+  async getUploadUrl(
+    @Body() dto: ImageUploadUrlDto,
+  ): Promise<UploadUrlResponseDto> {
+    return this.imagesService.generateUploadUrl(dto);
+  }
 
   @Get()
   @ApiOperation({ summary: 'List images (filter by category)' })
@@ -46,7 +60,7 @@ export class ImagesController {
   @Post()
   @UseGuards(SupabaseAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create image (admin only)' })
+  @ApiOperation({ summary: 'Create image with metadata (after file upload)' })
   create(@Body() dto: CreateImageDto) {
     return this.imagesService.create(dto);
   }
@@ -62,7 +76,7 @@ export class ImagesController {
   @Delete(':id')
   @UseGuards(SupabaseAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete image (admin only)' })
+  @ApiOperation({ summary: 'Delete image and file from storage' })
   remove(@Param('id') id: string) {
     return this.imagesService.remove(id);
   }

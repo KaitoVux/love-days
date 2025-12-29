@@ -66,14 +66,14 @@ Implement NestJS backend API on Vercel serverless with Supabase integration, sha
 
 ## Phase Overview
 
-| Phase | Name                                                                           | Duration | Status            | Dependencies |
-| ----- | ------------------------------------------------------------------------------ | -------- | ----------------- | ------------ |
-| 1     | [NestJS Backend Foundation](./phase-01-nestjs-backend-foundation.md)           | Week 1   | DONE (2025-12-29) | None         |
-| 2     | [Presigned URL File Upload](./phase-02-presigned-url-file-upload.md)           | Week 2   | Pending           | Phase 1      |
-| 3     | [Admin UI (shadcn Dashboard)](./phase-03-admin-ui-shadcn-dashboard.md)         | Week 3   | Pending           | Phase 2      |
-| 4     | [Frontend Integration & Webhooks](./phase-04-frontend-integration-webhooks.md) | Week 3-4 | Pending           | Phase 3      |
+| Phase | Name                                                                           | Duration | Status      | Dependencies | Completion Date |
+| ----- | ------------------------------------------------------------------------------ | -------- | ----------- | ------------ | --------------- |
+| 1     | [NestJS Backend Foundation](./phase-01-nestjs-backend-foundation.md)           | Week 1   | DONE        | None         | 2025-12-29      |
+| 2     | [Presigned URL File Upload](./phase-02-presigned-url-file-upload.md)           | Week 2   | DONE        | Phase 1      | 2025-12-29      |
+| 3     | [Admin UI (shadcn Dashboard)](./phase-03-admin-ui-shadcn-dashboard.md)         | Week 3   | In Progress | Phase 2      | 2025-12-31 ETA  |
+| 4     | [Frontend Integration & Webhooks](./phase-04-frontend-integration-webhooks.md) | Week 3-4 | Pending     | Phase 3      | 2026-01-05 ETA  |
 
-**Total Estimated Duration**: 3-4 weeks
+**Total Estimated Duration**: 2-3 weeks (accelerated: both Phase 1&2 done in week 1)
 
 ---
 
@@ -286,7 +286,8 @@ NEXT_PUBLIC_API_URL=https://love-days-api.vercel.app  # NEW
 
 ## Changelog
 
-| Date       | Change                                                                                                                             |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| 2025-12-29 | Phase 1 marked DONE: NestJS backend foundation complete with Prisma, Supabase auth, CRUD endpoints, Swagger docs, all tests passed |
-| 2025-12-29 | Initial plan created from brainstorm report                                                                                        |
+| Date       | Change                                                                                                                                                                    |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2025-12-29 | Phase 2 marked DONE: Presigned URL file upload complete with security hardening, MIME validation, env checks, shared DTOs, all quality issues resolved, all tests passing |
+| 2025-12-29 | Phase 1 marked DONE: NestJS backend foundation complete with Prisma, Supabase auth, CRUD endpoints, Swagger docs, all tests passed                                        |
+| 2025-12-29 | Initial plan created from brainstorm report                                                                                                                               |

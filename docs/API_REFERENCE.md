@@ -1,13 +1,13 @@
 # Love Days API Reference
 
-**Version**: 1.0.0
+**Version**: 2.0.0
 **Base URL**:
 
 - Development: `http://localhost:3001`
 - Production: `https://love-days-api.vercel.app`
 - Swagger Docs: `/api/docs`
 
-**Status**: Phase 1 Complete - Metadata Operations Only
+**Status**: Phase 02 Complete - File Upload & Metadata Operations
 
 ---
 
@@ -82,6 +82,167 @@ curl http://localhost:3001/api/v1/songs
 
 # List unpublished songs (draft)
 curl http://localhost:3001/api/v1/songs?published=false
+```
+
+---
+
+### Generate Song Upload URL
+
+Generate a presigned URL for uploading audio files directly to Supabase (admin only).
+
+**Endpoint**: `POST /api/v1/songs/upload-url`
+
+**Authentication**: Required (Bearer token)
+
+**Request Headers**:
+
+```
+Authorization: Bearer <jwt-token>
+Content-Type: application/json
+```
+
+**Request Body**:
+| Field | Type | Required | Constraints | Example |
+|-------|------|----------|-------------|---------|
+| fileName | string | Yes | 1+ chars | `"my-song.mp3"` |
+| fileType | string | Yes | MIME type | `"audio/mpeg"` |
+| fileSize | number | No | 1-52428800 (50MB) | `15728640` |
+
+**Allowed Audio MIME Types**:
+
+- `audio/mpeg` (MP3)
+- `audio/mp3` (MP3 alternative)
+- `audio/wav` (WAV)
+- `audio/ogg` (OGG)
+- `audio/flac` (FLAC)
+
+**Allowed Audio Extensions**:
+
+- `.mp3`, `.wav`, `.ogg`, `.flac`
+
+**Response**: 201 Created
+
+```json
+{
+  "uploadUrl": "https://[project].supabase.co/storage/v1/object/public/songs/550e8400-e29b-41d4-a716-446655440000.mp3?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "filePath": "songs/550e8400-e29b-41d4-a716-446655440000.mp3"
+}
+```
+
+**Response Fields**:
+| Field | Type | Description |
+|-------|------|-------------|
+| uploadUrl | string | Presigned URL for PUT upload (expires in 1 hour) |
+| filePath | string | File path for metadata storage (use in POST /songs) |
+
+**Error Responses**:
+
+400 Bad Request (File size exceeded)
+
+```json
+{
+  "statusCode": 400,
+  "message": "File size exceeds limit of 50MB"
+}
+```
+
+400 Bad Request (Invalid MIME type)
+
+```json
+{
+  "statusCode": 400,
+  "message": "Invalid file type: text/plain"
+}
+```
+
+400 Bad Request (Invalid extension)
+
+```json
+{
+  "statusCode": 400,
+  "message": "File extension .exe not allowed"
+}
+```
+
+401 Unauthorized
+
+```json
+{
+  "statusCode": 401,
+  "message": "Unauthorized"
+}
+```
+
+500 Internal Server Error
+
+```json
+{
+  "statusCode": 500,
+  "message": "Failed to generate upload URL: Supabase error details"
+}
+```
+
+**Security Features**:
+
+- MIME type validation (prevents XSS)
+- File extension validation (prevents path traversal)
+- File size limit (prevents DoS)
+- Unique file path generation (prevents collisions)
+- Presigned URL expires in 1 hour
+
+**Upload Flow**:
+
+1. Client calls this endpoint to get presigned URL
+2. Client uploads file directly to presigned URL (PUT request)
+3. Client calls POST /api/v1/songs with filePath and metadata
+
+**Example Request**:
+
+```bash
+curl -X POST http://localhost:3001/api/v1/songs/upload-url \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fileName": "autumn-leaves.mp3",
+    "fileType": "audio/mpeg",
+    "fileSize": 15728640
+  }'
+```
+
+**Example Response**:
+
+```json
+{
+  "uploadUrl": "https://project.supabase.co/storage/v1/object/public/songs/550e8400-e29b-41d4-a716-446655440000.mp3?token=...",
+  "filePath": "songs/550e8400-e29b-41d4-a716-446655440000.mp3"
+}
+```
+
+**Next Step - Upload File**:
+
+After receiving the uploadUrl, upload the file directly to Supabase:
+
+```bash
+curl -X PUT "https://project.supabase.co/storage/v1/object/public/songs/..." \
+  -H "Content-Type: audio/mpeg" \
+  --data-binary @autumn-leaves.mp3
+```
+
+**Then - Create Metadata**:
+
+After successful upload, create the song metadata record:
+
+```bash
+curl -X POST http://localhost:3001/api/v1/songs \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filePath": "songs/550e8400-e29b-41d4-a716-446655440000.mp3",
+    "title": "Autumn Leaves",
+    "artist": "Artist Name",
+    "album": "Album Name",
+    "duration": 264
+  }'
 ```
 
 ---
@@ -407,13 +568,175 @@ List images with optional category filter (public endpoint).
 ```bash
 # List all images
 curl http://localhost:3001/api/v1/images
+### Generate Image Upload URL
+
+Generate a presigned URL for uploading image files directly to Supabase (admin only).
+
+**Endpoint**: `POST /api/v1/images/upload-url`
+
+**Authentication**: Required (Bearer token)
+
+**Request Headers**:
+```
+
+Authorization: Bearer <jwt-token>
+Content-Type: application/json
+
+````
+
+**Request Body**:
+| Field | Type | Required | Constraints | Example |
+|-------|------|----------|-------------|---------|
+| fileName | string | Yes | 1+ chars | `"photo.jpg"` |
+| fileType | string | Yes | MIME type | `"image/jpeg"` |
+| fileSize | number | No | 1-5242880 (5MB) | `2097152` |
+
+**Allowed Image MIME Types**:
+- `image/jpeg` (JPG/JPEG)
+- `image/png` (PNG)
+- `image/webp` (WebP)
+- `image/gif` (GIF)
+
+**Allowed Image Extensions**:
+- `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`
+
+**Response**: 201 Created
+
+```json
+{
+  "uploadUrl": "https://[project].supabase.co/storage/v1/object/public/images/550e8400-e29b-41d4-a716-446655440000.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "filePath": "images/550e8400-e29b-41d4-a716-446655440000.jpg"
+}
+````
+
+**Response Fields**:
+| Field | Type | Description |
+|-------|------|-------------|
+| uploadUrl | string | Presigned URL for PUT upload (expires in 1 hour) |
+| filePath | string | File path for metadata storage (use in POST /images) |
+
+**Error Responses**:
+
+400 Bad Request (File size exceeded)
+
+```json
+{
+  "statusCode": 400,
+  "message": "File size exceeds limit of 5MB"
+}
+```
+
+400 Bad Request (Invalid MIME type)
+
+```json
+{
+  "statusCode": 400,
+  "message": "Invalid file type: application/pdf"
+}
+```
+
+400 Bad Request (Invalid extension)
+
+```json
+{
+  "statusCode": 400,
+  "message": "File extension .bmp not allowed"
+}
+```
+
+401 Unauthorized
+
+```json
+{
+  "statusCode": 401,
+  "message": "Unauthorized"
+}
+```
+
+500 Internal Server Error
+
+```json
+{
+  "statusCode": 500,
+  "message": "Failed to generate upload URL: Supabase error details"
+}
+```
+
+**Security Features**:
+
+- MIME type validation (prevents XSS)
+- File extension validation (prevents path traversal)
+- File size limit: 5MB (prevents storage abuse)
+- Unique file path generation (prevents collisions)
+- Presigned URL expires in 1 hour
+
+**Upload Flow**:
+
+1. Client calls this endpoint to get presigned URL
+2. Client uploads file directly to presigned URL (PUT request)
+3. Client calls POST /api/v1/images with filePath and metadata
+
+**Example Request**:
+
+```bash
+curl -X POST http://localhost:3001/api/v1/images/upload-url \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fileName": "profile.jpg",
+    "fileType": "image/jpeg",
+    "fileSize": 2097152
+  }'
+```
+
+**Example Response**:
+
+```json
+{
+  "uploadUrl": "https://project.supabase.co/storage/v1/object/public/images/550e8400-e29b-41d4-a716-446655440000.jpg?token=...",
+  "filePath": "images/550e8400-e29b-41d4-a716-446655440000.jpg"
+}
+```
+
+**Next Step - Upload File**:
+
+After receiving the uploadUrl, upload the file directly to Supabase:
+
+```bash
+curl -X PUT "https://project.supabase.co/storage/v1/object/public/images/..." \
+  -H "Content-Type: image/jpeg" \
+  --data-binary @profile.jpg
+```
+
+**Then - Create Metadata**:
+
+After successful upload, create the image metadata record:
+
+```bash
+curl -X POST http://localhost:3001/api/v1/images \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filePath": "images/550e8400-e29b-41d4-a716-446655440000.jpg",
+    "title": "Profile Picture",
+    "description": "Main profile photo",
+    "category": "profile",
+    "width": 500,
+    "height": 500
+  }'
+```
+
+---
 
 # List profile pictures only
+
 curl http://localhost:3001/api/v1/images?category=profile
 
 # List background images only
+
 curl http://localhost:3001/api/v1/images?category=background
-```
+
+````
 
 ---
 
@@ -445,7 +768,7 @@ Get details for a specific image (public endpoint).
   "updatedAt": "2025-12-29T09:00:00.000Z",
   "published": true
 }
-```
+````
 
 **Example Request**:
 
