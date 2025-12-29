@@ -9,16 +9,16 @@ import { UploadUrlResponseDto } from '../storage/dto/upload-url-response.dto';
 const MAX_SONG_SIZE = 50 * 1024 * 1024; // 50MB
 const SONGS_BUCKET = 'songs';
 
-interface SongTransformed {
+export interface SongTransformed {
   id: string;
   title: string;
   artist: string;
+  album: string | null;
   filePath: string;
   fileUrl: string;
-  fileType: string;
-  fileSize: number;
-  duration?: number;
-  thumbnailPath?: string;
+  fileSize: number | null;
+  duration: number | null;
+  thumbnailPath: string | null;
   thumbnailUrl?: string;
   published: boolean;
   createdAt: Date;
@@ -117,11 +117,11 @@ export class SongsService {
     id: string;
     title: string;
     artist: string;
+    album: string | null;
     filePath: string;
-    fileType: string;
-    fileSize: number;
-    duration?: number;
-    thumbnailPath?: string;
+    fileSize: number | null;
+    duration: number | null;
+    thumbnailPath: string | null;
     published: boolean;
     createdAt: Date;
     updatedAt: Date;
