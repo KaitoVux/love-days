@@ -1,7 +1,7 @@
 {
-  "name": "api",
+  "name": "@love-days/api",
   "version": "0.0.1",
-  "description": "",
+  "description": "Love Days API - NestJS backend for songs and images management",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
