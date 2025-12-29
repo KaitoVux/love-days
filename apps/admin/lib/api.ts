@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase";
 import type {
-  ISong,
-  IImage,
+  SongResponseDto,
+  ImageResponseDto,
   CreateSongDto,
   CreateImageDto,
   UpdateSongDto,
@@ -42,18 +42,18 @@ async function fetchApi<T>(
 // Songs API
 export const songsApi = {
   list: (published?: boolean) =>
-    fetchApi<ISong[]>(`/api/v1/songs?published=${published ?? ""}`),
+    fetchApi<SongResponseDto[]>(`/api/v1/songs?published=${published ?? ""}`),
 
-  get: (id: string) => fetchApi<ISong>(`/api/v1/songs/${id}`),
+  get: (id: string) => fetchApi<SongResponseDto>(`/api/v1/songs/${id}`),
 
   create: (data: CreateSongDto) =>
-    fetchApi<ISong>("/api/v1/songs", {
+    fetchApi<SongResponseDto>("/api/v1/songs", {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
   update: (id: string, data: UpdateSongDto) =>
-    fetchApi<ISong>(`/api/v1/songs/${id}`, {
+    fetchApi<SongResponseDto>(`/api/v1/songs/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),
     }),
@@ -62,7 +62,7 @@ export const songsApi = {
     fetchApi<void>(`/api/v1/songs/${id}`, { method: "DELETE" }),
 
   publish: (id: string, published: boolean) =>
-    fetchApi<ISong>(`/api/v1/songs/${id}/publish`, {
+    fetchApi<SongResponseDto>(`/api/v1/songs/${id}/publish`, {
       method: "POST",
       body: JSON.stringify({ published }),
     }),
@@ -80,24 +80,30 @@ export const songsApi = {
 // Images API
 export const imagesApi = {
   list: (category?: string) =>
-    fetchApi<IImage[]>(`/api/v1/images?category=${category ?? ""}`),
+    fetchApi<ImageResponseDto[]>(`/api/v1/images?category=${category ?? ""}`),
 
-  get: (id: string) => fetchApi<IImage>(`/api/v1/images/${id}`),
+  get: (id: string) => fetchApi<ImageResponseDto>(`/api/v1/images/${id}`),
 
   create: (data: CreateImageDto) =>
-    fetchApi<IImage>("/api/v1/images", {
+    fetchApi<ImageResponseDto>("/api/v1/images", {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
   update: (id: string, data: UpdateImageDto) =>
-    fetchApi<IImage>(`/api/v1/images/${id}`, {
+    fetchApi<ImageResponseDto>(`/api/v1/images/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),
     }),
 
   delete: (id: string) =>
     fetchApi<void>(`/api/v1/images/${id}`, { method: "DELETE" }),
+
+  publish: (id: string, published: boolean) =>
+    fetchApi<ImageResponseDto>(`/api/v1/images/${id}/publish`, {
+      method: "POST",
+      body: JSON.stringify({ published }),
+    }),
 
   getUploadUrl: (fileName: string, fileType: string, fileSize?: number) =>
     fetchApi<{ uploadUrl: string; filePath: string }>(
