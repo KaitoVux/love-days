@@ -28,11 +28,14 @@ packages/
 
 **Next.js Application (`apps/web`):**
 
-- Uses **Pages Router** (not App Router) with pages in `pages/` directory
+- Uses **App Router** with `app/` directory (Next.js 15)
 - Configured for **static export** (`output: "export"`) - builds to `out/` directory
-- Components organized by feature in `components/` directory
-- Styling with CSS Modules (`.module.scss`) and Tailwind CSS
-- Key component: `Player` - audio player with playlist, uses Supabase storage
+- Components organized in:
+  - `components/LoveDays/` - Main app components (Title, ProfileSection, CountUp, Footer, FloatingHearts, MusicSidebar)
+  - `components/ui/` - shadcn/ui components (Slider)
+- Styling with **Tailwind-first** approach + CSS custom properties
+- Icons: **lucide-react** (replaced static images)
+- Key component: `MusicSidebar` - full-featured audio player with playlist, uses Supabase storage
 
 **Shared Utilities (`packages/utils`):**
 
@@ -46,6 +49,41 @@ packages/
 - `@love-days/utils` - Internal utility package shared across apps
 - Supabase Storage - Audio files stored in public "songs" bucket
 - Turbopack - Fast development builds with Next.js 15
+- `@radix-ui/react-slider` - Accessible slider primitive for music player
+- `lucide-react` - Icon library (^0.562.0)
+
+## Theme System
+
+**Color Scheme (350 hue - Rose Pink):**
+
+HSL CSS custom properties defined in `styles/globals.scss`:
+
+```scss
+--primary: 350 80% 65%; // Rose pink accent
+--background: 350 30% 8%; // Dark background
+--foreground: 350 20% 95%; // Light text
+--card: 350 20% 10%; // Card backgrounds
+--muted: 350 10% 40%; // Muted text
+--accent: 350 60% 60%; // Accent color
+--border: 350 20% 20%; // Border color
+```
+
+**Typography:**
+
+- `font-display: "Playfair Display"` - Headings and titles
+- `font-body: system-ui` - Body text
+- `font-sans-clean: ui-sans-serif` - Clean UI text (player, clock)
+
+**Responsive Breakpoints:**
+
+- xs: 320px, sm: 640px, md: 768px, lg: 1024px, xl: 1280px
+
+**Animations:**
+
+- `animate-fade-in` - Entrance animations with staggered delays
+- `animate-pulse-slow` - Slow pulse for heart icons
+- `animate-float` - Floating animation for profile images
+- `animate-float-up` - Upward floating for background hearts
 
 ## Essential Commands
 
