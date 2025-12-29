@@ -1,17 +1,19 @@
 # Love Days - Project Overview
 
-**Version**: 1.2
-**Last Updated**: 2025-12-26
-**Tech Stack**: Next.js 15, React 19, TypeScript 5.4, Turborepo, Tailwind CSS, Supabase
-**Status**: Active Development (Phase 04 Complete - Component Refactor Done)
+**Version**: 2.0
+**Last Updated**: 2025-12-29
+**Tech Stack**: Next.js 15, React 19, NestJS 11, TypeScript 5.4, Turborepo, Tailwind CSS, Supabase, Prisma 7
+**Status**: Active Development (Phase 05 Complete - Backend Foundation Deployed)
 
 ## Quick Summary
 
 Love Days is a modern, design-focused Next.js audio player application. Built as a Turborepo monorepo with TypeScript-first approach. Features an elegant UI with HSL-based theme system, Supabase-powered audio storage, and prepared App Router migration path.
 
-**Core Purpose**: Beautiful, functional music player with playlist management and responsive design.
+**Core Purpose**: Beautiful, functional music player with backend content management system for non-technical admin users.
 
 ## Tech Stack
+
+### Frontend
 
 | Layer             | Technology          | Version | Purpose                          |
 | ----------------- | ------------------- | ------- | -------------------------------- |
@@ -20,11 +22,28 @@ Love Days is a modern, design-focused Next.js audio player application. Built as
 | **UI Framework**  | React               | 19.0.0  | Component system                 |
 | **Styling**       | Tailwind CSS        | 3.4.1   | Utility-first CSS                |
 | **CSS Processor** | Sass                | 1.71.1  | CSS preprocessing                |
-| **Monorepo Tool** | Turborepo           | -       | Workspace orchestration          |
-| **Storage**       | Supabase            | -       | Audio file CDN                   |
 | **Icons**         | Lucide React        | 0.562.0 | Icon library                     |
 | **Components**    | shadcn/ui           | -       | Headless UI components           |
 | **Animations**    | tailwindcss-animate | 1.0.7   | Built-in animations              |
+
+### Backend
+
+| Layer              | Technology       | Version | Purpose                        |
+| ------------------ | ---------------- | ------- | ------------------------------ |
+| **Framework**      | NestJS           | 11.0.1  | Modular Node.js backend        |
+| **ORM**            | Prisma           | 7.2.0   | Type-safe database access      |
+| **Database**       | PostgreSQL       | -       | Relational database (Supabase) |
+| **Authentication** | Supabase Auth    | -       | JWT token validation           |
+| **File Storage**   | Supabase Storage | -       | Audio/image file hosting       |
+| **Deployment**     | Vercel           | -       | Serverless functions           |
+| **API Docs**       | Swagger/OpenAPI  | -       | Interactive API documentation  |
+
+### Monorepo
+
+| Tool               | Version | Purpose                           |
+| ------------------ | ------- | --------------------------------- |
+| **Turborepo**      | 2.5.3   | Workspace orchestration & caching |
+| **npm Workspaces** | 10.0.0  | Package management                |
 
 ## Architecture
 
@@ -33,10 +52,12 @@ Love Days is a modern, design-focused Next.js audio player application. Built as
 ```
 love-days/
 ├── apps/
-│   ├── web/              # Main Next.js application (Pages Router)
+│   ├── web/              # Frontend: Next.js 15 (Cloudflare Pages)
+│   ├── api/              # Backend: NestJS 11 (Vercel Serverless) ✅ PHASE 1
 │   └── portal/           # Secondary application
 ├── packages/
-│   └── utils/            # Shared utilities
+│   ├── utils/            # Shared utilities (dates, song data)
+│   └── types/            # Shared TypeScript types (DTOs, interfaces) ✅ PHASE 1
 ├── docs/                 # Project documentation
 ├── turbo.json            # Turborepo configuration
 ├── package.json          # Workspace root
@@ -81,11 +102,83 @@ packages/utils/
 ├── dist/                 # Compiled output
 ├── package.json
 └── tsconfig.json
+
+packages/types/  ✅ NEW PHASE 1
+├── src/
+│   ├── song.ts           # ISong, CreateSongDto, SongResponseDto
+│   ├── image.ts          # IImage, CreateImageDto, ImageResponseDto
+│   └── index.ts          # Barrel exports
+├── dist/                 # Compiled output
+├── package.json
+└── tsconfig.json
+
+apps/api/  ✅ NEW PHASE 1
+├── src/
+│   ├── main.ts           # Application bootstrap + CORS + Swagger
+│   ├── app.module.ts     # Root module
+│   ├── app.controller.ts # Health check endpoint
+│   ├── auth/
+│   │   ├── auth.guard.ts        # Supabase JWT validation
+│   │   ├── auth.service.ts      # Token verification logic
+│   │   └── auth.module.ts       # Auth module
+│   ├── songs/
+│   │   ├── songs.controller.ts  # REST endpoints
+│   │   ├── songs.service.ts     # Business logic
+│   │   ├── songs.module.ts      # Module config
+│   │   └── dto/
+│   │       ├── create-song.dto.ts
+│   │       └── update-song.dto.ts
+│   ├── images/
+│   │   ├── images.controller.ts # REST endpoints
+│   │   ├── images.service.ts    # Business logic
+│   │   ├── images.module.ts     # Module config
+│   │   └── dto/
+│   │       ├── create-image.dto.ts
+│   │       └── update-image.dto.ts
+│   ├── prisma/
+│   │   ├── prisma.service.ts    # Database client
+│   │   └── prisma.module.ts     # Prisma module
+│   └── common/
+│       └── interfaces/
+│           └── request-with-user.interface.ts
+├── prisma/
+│   ├── schema.prisma     # Database schema (songs, images tables)
+│   └── migrations/       # Database migrations
+├── test/                 # E2E tests
+├── vercel.json           # Vercel serverless config
+├── .env.sample           # Environment template
+├── package.json          # NestJS dependencies
+└── tsconfig.json         # TypeScript config
 ```
 
 ## Key Features
 
-### 1. Audio Player (`apps/web/components/Player`)
+### 1. NestJS Backend API ✅ PHASE 1
+
+**Status**: Production-ready, deployed to Vercel Serverless
+
+- **Song Management**: CRUD metadata operations
+- **Image Management**: CRUD metadata operations
+- **Authentication**: Supabase JWT validation
+- **Database**: PostgreSQL via Prisma ORM with Prisma 7 adapter
+- **API Documentation**: Swagger/OpenAPI at `/api/docs`
+- **CORS**: Configured for multi-domain access
+- **TypeScript**: Shared types with `@love-days/types` package
+- **Deployment**: Vercel serverless functions
+- **Local Development**: Port 3001
+
+**Endpoints**:
+
+- `GET /api/v1/songs` - List published songs
+- `POST /api/v1/songs` - Create song (admin)
+- `PATCH /api/v1/songs/:id` - Update song (admin)
+- `DELETE /api/v1/songs/:id` - Delete song (admin)
+- `GET /api/v1/images` - List images
+- `POST /api/v1/images` - Create image (admin)
+
+**Phase 2 Coming**: Presigned URL file uploads, Sharp thumbnails, direct Supabase Storage integration
+
+### 2. Audio Player (`apps/web/components/Player`)
 
 - Playlist management
 - Play/pause/skip controls
@@ -94,7 +187,7 @@ packages/utils/
 - Volume control
 - Uses Supabase Storage for audio files
 
-### 2. Design System
+### 3. Design System
 
 - **Theme**: HSL-based color system (11 primary variables)
 - **Fonts**: Three-tier hierarchy (display, body, sans)
