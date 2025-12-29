@@ -9,14 +9,16 @@ import { UploadUrlResponseDto } from '../storage/dto/upload-url-response.dto';
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 const IMAGES_BUCKET = 'images';
 
-interface ImageTransformed {
+export interface ImageTransformed {
   id: string;
-  fileName: string;
+  title: string;
+  description: string | null;
   filePath: string;
   fileUrl: string;
-  fileType: string;
-  fileSize: number;
-  category?: string;
+  fileSize: number | null;
+  width: number | null;
+  height: number | null;
+  category: string;
   published: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -105,11 +107,13 @@ export class ImagesService {
 
   private transformImage(image: {
     id: string;
-    fileName: string;
+    title: string;
+    description: string | null;
     filePath: string;
-    fileType: string;
-    fileSize: number;
-    category?: string;
+    fileSize: number | null;
+    width: number | null;
+    height: number | null;
+    category: string;
     published: boolean;
     createdAt: Date;
     updatedAt: Date;
