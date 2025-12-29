@@ -22,7 +22,7 @@ import Image from "next/image";
 
 const MusicSidebar = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(0);
   const [volume, setVolume] = useState(70);
