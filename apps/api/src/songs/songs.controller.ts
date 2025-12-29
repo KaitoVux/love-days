@@ -14,16 +14,31 @@ import {
   ApiOperation,
   ApiBearerAuth,
   ApiQuery,
+  ApiResponse,
 } from '@nestjs/swagger';
 import { SongsService } from './songs.service';
 import { CreateSongDto } from './dto/create-song.dto';
 import { UpdateSongDto } from './dto/update-song.dto';
+import { SongUploadUrlDto } from './dto/upload-url.dto';
+import { UploadUrlResponseDto } from '../storage/dto/upload-url-response.dto';
 import { SupabaseAuthGuard } from '../auth/auth.guard';
 
 @ApiTags('songs')
 @Controller('api/v1/songs')
 export class SongsController {
   constructor(private readonly songsService: SongsService) {}
+
+  // Generate presigned upload URL
+  @Post('upload-url')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Generate presigned upload URL for audio file' })
+  @ApiResponse({ status: 201, type: UploadUrlResponseDto })
+  async getUploadUrl(
+    @Body() dto: SongUploadUrlDto,
+  ): Promise<UploadUrlResponseDto> {
+    return this.songsService.generateUploadUrl(dto);
+  }
 
   @Get()
   @ApiOperation({ summary: 'List all songs (public: published only)' })
@@ -42,7 +57,7 @@ export class SongsController {
   @Post()
   @UseGuards(SupabaseAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create song (admin only)' })
+  @ApiOperation({ summary: 'Create song with metadata (after file upload)' })
   create(@Body() dto: CreateSongDto) {
     return this.songsService.create(dto);
   }
@@ -58,7 +73,7 @@ export class SongsController {
   @Delete(':id')
   @UseGuards(SupabaseAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete song (admin only)' })
+  @ApiOperation({ summary: 'Delete song and file from storage' })
   remove(@Param('id') id: string) {
     return this.songsService.remove(id);
   }

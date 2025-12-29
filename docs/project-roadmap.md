@@ -1,8 +1,8 @@
 # Love Days - Project Roadmap
 
-**Last Updated:** 2025-12-26
-**Overall Progress:** 50% Complete
-**Status:** Active Development - Phase 04 Complete
+**Last Updated:** 2025-12-29
+**Overall Progress:** 52% Complete
+**Status:** Active Development - NestJS Backend Phase 2 Complete
 
 ---
 
@@ -12,7 +12,33 @@ Love Days is a Next.js application with audio player functionality built on Turb
 
 ---
 
-## Active Initiative: Next.js UI Theme Refactor
+## Active Initiatives
+
+### 1. NestJS Backend Songs & Images Management
+
+**Plan:** [plans/2025-12-29-nestjs-backend-songs-images/plan.md](../plans/2025-12-29-nestjs-backend-songs-images/plan.md)
+**Status:** In Progress (50% complete - 2/4 phases done)
+**Goal:** Implement NestJS backend API on Vercel serverless with presigned URL file upload, Supabase integration, and shadcn Admin UI
+
+#### Phase Status
+
+| Phase | Name                 | Status     | Completion     |
+| ----- | -------------------- | ---------- | -------------- |
+| 1     | Backend Foundation   | ✅ Done    | 2025-12-29     |
+| 2     | Presigned URL Upload | ✅ Done    | 2025-12-29     |
+| 3     | Admin UI (shadcn)    | 🔄 Next    | 2025-12-31 ETA |
+| 4     | Frontend Integration | ⏳ Pending | 2026-01-05 ETA |
+
+**Key Achievements:**
+
+- StorageModule with presigned URL generation (songs + images)
+- Security hardened with env validation, MIME allowlist, path safety
+- Shared DTOs implementation (DRY principle)
+- All code quality issues fixed (formatting, types, linting)
+
+---
+
+### 2. Next.js UI Theme Refactor
 
 **Plan:** [plans/251225-1713-nextjs-ui-theme-refactor/plan.md](../plans/251225-1713-nextjs-ui-theme-refactor/plan.md)
 **Status:** In Progress (66.7% complete - 4/6 phases done)
