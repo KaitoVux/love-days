@@ -6,6 +6,8 @@ import type {
   CreateImageDto,
   UpdateSongDto,
   UpdateImageDto,
+  DeployResponseDto,
+  DeployStatusDto,
 } from "@love-days/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -113,4 +115,14 @@ export const imagesApi = {
         body: JSON.stringify({ fileName, fileType, fileSize }),
       },
     ),
+};
+
+// Deploy API
+export const deployApi = {
+  trigger: () =>
+    fetchApi<DeployResponseDto>("/api/v1/deploy/trigger", {
+      method: "POST",
+    }),
+
+  status: () => fetchApi<DeployStatusDto>("/api/v1/deploy/status"),
 };
