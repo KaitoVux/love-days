@@ -5,6 +5,7 @@ import { StorageModule } from './storage/storage.module';
 import { AuthModule } from './auth/auth.module';
 import { SongsModule } from './songs/songs.module';
 import { ImagesModule } from './images/images.module';
+import { DeployModule } from './deploy/deploy.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ImagesModule } from './images/images.module';
     AuthModule,
     SongsModule,
     ImagesModule,
+    DeployModule,
   ],
 })
 export class AppModule {}
