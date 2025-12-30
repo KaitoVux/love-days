@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,33 +11,53 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
-import { RefreshCw, CheckCircle } from "lucide-react";
+import { RefreshCw, CheckCircle, AlertCircle } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { toast } from "sonner";
+import { deployApi } from "@/lib/api";
 
 export default function SettingsPage() {
   const { user } = useAuth();
   const [rebuilding, setRebuilding] = useState(false);
   const [lastRebuild, setLastRebuild] = useState<Date | null>(null);
+  const [webhookConfigured, setWebhookConfigured] = useState(true);
+  const [checkingStatus, setCheckingStatus] = useState(true);
+
+  useEffect(() => {
+    const checkDeployStatus = async () => {
+      try {
+        const status = await deployApi.status();
+        setWebhookConfigured(status.configured);
+      } catch (error) {
+        console.error("Failed to check deploy status:", error);
+        setWebhookConfigured(false);
+      } finally {
+        setCheckingStatus(false);
+      }
+    };
+
+    checkDeployStatus();
+  }, []);
 
   const handleRebuild = async () => {
-    const webhookUrl = process.env.NEXT_PUBLIC_CLOUDFLARE_DEPLOY_HOOK_URL;
-
-    if (!webhookUrl) {
-      toast.error("Cloudflare deploy hook URL not configured");
+    if (!webhookConfigured) {
+      toast.error("Cloudflare deploy hook not configured on server");
       return;
     }
 
     setRebuilding(true);
     try {
-      const response = await fetch(webhookUrl, { method: "POST" });
+      const response = await deployApi.trigger();
 
-      if (!response.ok) {
-        throw new Error("Failed to trigger rebuild");
+      if (response.success) {
+        setLastRebuild(new Date());
+        toast.success(
+          response.message ||
+            "Site rebuild triggered! It will be live in ~2 minutes.",
+        );
+      } else {
+        throw new Error(response.message || "Failed to trigger rebuild");
       }
-
-      setLastRebuild(new Date());
-      toast.success("Site rebuild triggered! It will be live in ~2 minutes.");
     } catch (error: unknown) {
       toast.error(
         error instanceof Error ? error.message : "Failed to trigger rebuild",
@@ -65,9 +85,19 @@ export default function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {!checkingStatus && !webhookConfigured && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                Cloudflare deploy hook is not configured on the server. Please
+                set CLOUDFLARE_DEPLOY_HOOK_URL in the API environment variables.
+              </AlertDescription>
+            </Alert>
+          )}
+
           <Button
             onClick={handleRebuild}
-            disabled={rebuilding}
+            disabled={rebuilding || checkingStatus || !webhookConfigured}
             className="flex items-center gap-2"
           >
             <RefreshCw className={rebuilding ? "animate-spin" : ""} size={16} />
