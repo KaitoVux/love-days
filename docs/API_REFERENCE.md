@@ -1,13 +1,15 @@
 # Love Days API Reference
 
-**Version**: 2.0.0
+**Version**: 2.2.0
 **Base URL**:
 
 - Development: `http://localhost:3001`
 - Production: `https://love-days-api.vercel.app`
 - Swagger Docs: `/api/docs`
 
-**Status**: Phase 02 Complete - File Upload & Metadata Operations
+**Status**: Phase 05 - Cloudflare Deploy Integration (ACTIVE)
+
+**NOTE**: This API is now integrated with the Next.js frontend via build-time data fetching. See [PHASE04_FRONTEND_INTEGRATION.md](PHASE04_FRONTEND_INTEGRATION.md) for integration details.
 
 ---
 
@@ -952,18 +954,194 @@ curl -X DELETE http://localhost:3001/api/v1/images/660f9511-f40c-52e5-b827-55776
 
 ---
 
+## Deploy Endpoints
+
+### Trigger Cloudflare Pages Rebuild
+
+Trigger a rebuild of the Cloudflare Pages deployment via server-to-server webhook proxy (admin only).
+
+**Endpoint**: `POST /api/v1/deploy/trigger`
+
+**Authentication**: Required (Bearer token)
+
+**Request Headers**:
+
+```
+Authorization: Bearer <jwt-token>
+Content-Type: application/json
+```
+
+**Request Body**: Empty (no body required)
+
+**Response**: 200 OK
+
+```json
+{
+  "success": true,
+  "message": "Rebuild triggered successfully",
+  "timestamp": "2025-12-30T10:30:45.123Z",
+  "status": 200
+}
+```
+
+**Response Fields**:
+| Field | Type | Description |
+|-------|------|-------------|
+| success | boolean | Whether rebuild was triggered successfully |
+| message | string | Human-readable status message |
+| timestamp | string | ISO 8601 datetime when rebuild was triggered |
+| status | number | HTTP status code from Cloudflare API |
+
+**Error Responses**:
+
+503 Service Unavailable (Webhook not configured)
+
+```json
+{
+  "statusCode": 503,
+  "message": "Cloudflare deploy hook not configured",
+  "error": "Service Unavailable"
+}
+```
+
+500 Internal Server Error (Rebuild trigger failed)
+
+```json
+{
+  "statusCode": 500,
+  "message": "Failed to trigger rebuild",
+  "success": false,
+  "error": "Internal Server Error"
+}
+```
+
+401 Unauthorized (Missing or invalid token)
+
+```json
+{
+  "statusCode": 401,
+  "message": "Unauthorized"
+}
+```
+
+**Security Features**:
+
+- Authentication required (Supabase JWT token)
+- Server-to-server proxy avoids CORS issues
+- Webhook URL stored securely in environment variables
+- No sensitive data exposed in responses
+
+**How It Works**:
+
+1. Client sends authenticated request to POST /api/v1/deploy/trigger
+2. Server validates Supabase JWT token via SupabaseAuthGuard
+3. Server proxies request to Cloudflare Pages Deploy Hook URL
+4. Cloudflare receives webhook and triggers Pages rebuild
+5. Response is returned to client with status and timestamp
+
+**Configuration**:
+
+Set the webhook URL in environment variables (`.env` file):
+
+```env
+CLOUDFLARE_DEPLOY_HOOK_URL="https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/YOUR_HOOK_ID"
+```
+
+To get your hook URL:
+
+1. Go to Cloudflare Pages project settings
+2. Navigate to "Build & deployments"
+3. Copy the deploy hook URL from the webhooks section
+
+**Example Request**:
+
+```bash
+curl -X POST http://localhost:3001/api/v1/deploy/trigger \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+  -H "Content-Type: application/json"
+```
+
+**Example Response**:
+
+```json
+{
+  "success": true,
+  "message": "Rebuild triggered successfully",
+  "timestamp": "2025-12-30T10:30:45.123Z",
+  "status": 200
+}
+```
+
+---
+
+### Check Deploy Configuration Status
+
+Check whether the Cloudflare Pages deploy webhook is properly configured (public endpoint).
+
+**Endpoint**: `GET /api/v1/deploy/status`
+
+**Authentication**: Not required
+
+**Response**: 200 OK
+
+```json
+{
+  "configured": true,
+  "webhookConfigured": true
+}
+```
+
+**Response Fields**:
+| Field | Type | Description |
+|-------|------|-------------|
+| configured | boolean | Whether CLOUDFLARE_DEPLOY_HOOK_URL is set in environment |
+| webhookConfigured | boolean | Alias for configured status |
+
+**Use Cases**:
+
+- Verify webhook is configured before showing deploy UI in admin panel
+- Health check to ensure deployment infrastructure is ready
+- Diagnostics when rebuild triggers fail
+
+**Example Request**:
+
+```bash
+curl http://localhost:3001/api/v1/deploy/status
+```
+
+**Example Response**:
+
+```json
+{
+  "configured": true,
+  "webhookConfigured": true
+}
+```
+
+**Webhook Not Configured Response**:
+
+```json
+{
+  "configured": false,
+  "webhookConfigured": false
+}
+```
+
+---
+
 ## Error Codes
 
 ### HTTP Status Codes
 
-| Code | Meaning      | Cause                                   |
-| ---- | ------------ | --------------------------------------- |
-| 200  | OK           | Successful request                      |
-| 201  | Created      | Resource successfully created           |
-| 400  | Bad Request  | Invalid input data (validation failure) |
-| 401  | Unauthorized | Missing or invalid authentication token |
-| 404  | Not Found    | Resource not found                      |
-| 500  | Server Error | Internal server error                   |
+| Code | Meaning             | Cause                                   |
+| ---- | ------------------- | --------------------------------------- |
+| 200  | OK                  | Successful request                      |
+| 201  | Created             | Resource successfully created           |
+| 400  | Bad Request         | Invalid input data (validation failure) |
+| 401  | Unauthorized        | Missing or invalid authentication token |
+| 404  | Not Found           | Resource not found                      |
+| 500  | Server Error        | Internal server error                   |
+| 503  | Service Unavailable | Required service not configured         |
 
 ### Error Response Format
 
@@ -1048,13 +1226,23 @@ All errors return JSON with structure:
 
 ---
 
-## Coming in Phase 2
+## Implemented Features
 
-- Presigned URL file upload endpoints
+- Presigned URL file upload endpoints (Songs & Images)
 - Direct Supabase Storage integration
+- Image thumbnail support (upload URLs)
+- File validation (type, size, extensions)
+- Cloudflare Pages deploy webhook proxy
+- Swagger/OpenAPI documentation
+
+## Coming in Future Phases
+
 - Image thumbnail generation (Sharp)
-- File validation (type, size)
 - Upload progress tracking
+- Rate limiting per user/IP
+- Batch operations (multi-file upload)
+- Advanced caching strategies
+- WebSocket support for real-time deployments
 
 ---
 
@@ -1069,5 +1257,6 @@ For issues or questions:
 
 ---
 
-**Last Updated**: 2025-12-29
-**API Version**: 1.0.0
+**Last Updated**: 2025-12-30
+**API Version**: 2.2.0
+**Status**: Phase 05 - Cloudflare Deploy Integration (ACTIVE)
