@@ -17,10 +17,14 @@ import {
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
-import { songs, ISong } from "@love-days/utils";
+import { ISong } from "@love-days/utils";
 import Image from "next/image";
 
-const MusicSidebar = () => {
+interface MusicSidebarProps {
+  songs: ISong[];
+}
+
+const MusicSidebar = ({ songs }: MusicSidebarProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
