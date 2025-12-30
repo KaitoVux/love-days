@@ -41,10 +41,12 @@ export class SongsController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'List all songs (public: published only)' })
+  @ApiOperation({ summary: 'List all songs' })
   @ApiQuery({ name: 'published', required: false, type: Boolean })
   findAll(@Query('published') published?: string) {
-    const isPublished = published === 'false' ? false : true;
+    // Handle query param: 'true' -> true, 'false' -> false, empty/undefined -> undefined (all)
+    const isPublished =
+      published === 'true' ? true : published === 'false' ? false : undefined;
     return this.songsService.findAll(isPublished);
   }
 

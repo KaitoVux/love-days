@@ -59,6 +59,8 @@ export default function EditSongPage({
           artist: song.artist,
           album: song.album,
           filePath: song.filePath,
+          thumbnailPath: song.thumbnailPath,
+          thumbnailUrl: song.thumbnailUrl,
         }}
       />
     </div>

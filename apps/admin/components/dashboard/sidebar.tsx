@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Songs", href: "/dashboard/songs", icon: Music },
-  { name: "Images", href: "/dashboard/images", icon: Image },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
+  { name: "Songs", href: "/songs", icon: Music },
+  { name: "Images", href: "/images", icon: Image },
+  { name: "Settings", href: "/settings", icon: Settings },
 ];
 
 export function Sidebar() {

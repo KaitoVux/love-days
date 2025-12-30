@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   Table,
   TableBody,
@@ -17,7 +18,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Pencil, Trash2, Play, Pause } from "lucide-react";
+import {
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+  Play,
+  Pause,
+  Music,
+} from "lucide-react";
 import type { SongResponseDto } from "@love-days/types";
 import { songsApi } from "@/lib/api";
 import { useRouter } from "next/navigation";
@@ -82,6 +90,7 @@ export function SongsTable({ songs, onRefresh }: SongsTableProps) {
         <TableHeader>
           <TableRow>
             <TableHead className="w-12"></TableHead>
+            <TableHead className="w-16">Art</TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Artist</TableHead>
             <TableHead>Album</TableHead>
@@ -104,6 +113,21 @@ export function SongsTable({ songs, onRefresh }: SongsTableProps) {
                     <Play className="h-4 w-4" />
                   )}
                 </Button>
+              </TableCell>
+              <TableCell>
+                {song.thumbnailUrl ? (
+                  <Image
+                    src={song.thumbnailUrl}
+                    alt={song.title}
+                    width={40}
+                    height={40}
+                    className="rounded object-cover"
+                  />
+                ) : (
+                  <div className="flex h-10 w-10 items-center justify-center rounded bg-muted">
+                    <Music className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                )}
               </TableCell>
               <TableCell className="font-medium">{song.title}</TableCell>
               <TableCell>{song.artist}</TableCell>
@@ -143,7 +167,7 @@ export function SongsTable({ songs, onRefresh }: SongsTableProps) {
           {songs.length === 0 && (
             <TableRow>
               <TableCell
-                colSpan={6}
+                colSpan={7}
                 className="text-center py-8 text-muted-foreground"
               >
                 No songs yet. Upload your first song!
