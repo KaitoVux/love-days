@@ -1,4 +1,5 @@
 import { ISong } from "./types";
+import { fetchPublishedSongs } from "./api-client";
 
 // Supabase storage base URL from environment variables
 const supabaseStorageUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -14,7 +15,8 @@ const createSongUrl = (filename: string): string => {
   return `${supabaseStorageUrl}/${encodeURIComponent(filename)}`;
 };
 
-export const songs: Array<ISong> = [
+// Static fallback songs (used if API unavailable)
+export const staticSongs: Array<ISong> = [
   {
     id: "the-one-kodaline",
     name: "The One",
@@ -129,7 +131,31 @@ export const songs: Array<ISong> = [
   },
 ];
 
+/**
+ * Get songs - tries API first, falls back to static data
+ * Used by Next.js at build time for static generation
+ */
+export async function getSongs(): Promise<ISong[]> {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  // If API URL configured, try fetching from API
+  if (apiUrl) {
+    const apiSongs = await fetchPublishedSongs();
+    if (apiSongs.length > 0) {
+      console.log(`Fetched ${apiSongs.length} songs from API`);
+      return apiSongs;
+    }
+  }
+
+  // Fallback to static songs
+  console.log("Using static song data (API unavailable or returned no songs)");
+  return staticSongs;
+}
+
+// Keep existing exports for backward compatibility
+export const songs = staticSongs;
+
 // Helper function to get a song by ID
 export const getSongById = (id: string): ISong | undefined => {
-  return songs.find(song => song.id === id);
+  return staticSongs.find(song => song.id === id);
 };
