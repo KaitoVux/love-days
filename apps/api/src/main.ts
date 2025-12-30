@@ -43,7 +43,7 @@ async function bootstrap() {
   await app.init();
 
   // For local development
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 3002;
   await app.listen(port);
   console.log(`🚀 API running on http://localhost:${port}`);
   console.log(`📚 Swagger docs: http://localhost:${port}/api/docs`);
