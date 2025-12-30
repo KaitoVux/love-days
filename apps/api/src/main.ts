@@ -25,7 +25,7 @@ async function bootstrap() {
       'https://love-days.pages.dev',
       'https://love-days-admin.vercel.app',
       'http://localhost:3000',
-      'http://localhost:3002',
+      'http://localhost:3001',
     ],
     credentials: true,
   });

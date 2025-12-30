@@ -47,7 +47,9 @@ export class ImagesController {
     @Query('published') published?: string,
     @Query('category') category?: string,
   ) {
-    const isPublished = published === 'false' ? false : true;
+    // Handle query param: 'true' -> true, 'false' -> false, empty/undefined -> undefined (all)
+    const isPublished =
+      published === 'true' ? true : published === 'false' ? false : undefined;
     return this.imagesService.findAll(isPublished, category);
   }
 
