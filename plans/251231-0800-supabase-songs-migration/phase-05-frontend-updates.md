@@ -4,7 +4,7 @@
 **Dependencies**: [Phase 4](phase-04-verification.md)
 **Date**: 2025-12-31
 **Priority**: P1 (High)
-**Status**: 🔴 Not Started
+**Status**: ✅ DONE (2025-12-31 16:12:50)
 
 ## Overview
 
@@ -334,18 +334,18 @@ EOF
 
 ## Todo List
 
-- [ ] Verify `packages/utils/src/songs.ts` already correct
-- [ ] Update `apps/web/.env.sample` documentation
-- [ ] Remove OLD\_\* variables from `.env.local` (after 30 days)
-- [ ] Add migration section to `CLAUDE.md`
-- [ ] Create migration report in `docs/migrations/`
-- [ ] Create archive directory for migration scripts
-- [ ] Move scripts to archive/
-- [ ] Create archive README
-- [ ] Run production build test
-- [ ] Verify no errors in production mode
-- [ ] Create team summary (optional)
-- [ ] Update git branch with all changes
+- [x] Verify `packages/utils/src/songs.ts` already correct
+- [x] Update `apps/web/.env.sample` documentation
+- [ ] Remove OLD\_\* variables from `.env.local` (deferred to 2026-01-30)
+- [x] Add migration section to `CLAUDE.md`
+- [x] Create migration report in `docs/migrations/`
+- [x] Create archive directory for migration scripts
+- [x] Move scripts to archive/ (renamed to .bak)
+- [x] Create archive README
+- [x] Run production build test
+- [x] Verify no errors in production mode
+- [ ] Create team summary (optional, skipped)
+- [ ] Update git branch with all changes (pending final commit)
 
 ## Success Criteria
 

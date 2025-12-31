@@ -2,6 +2,59 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Recent Changes
+
+### Supabase Migration (2025-12-31)
+
+**What Changed**:
+
+- Migrated 16 songs from old Supabase (`lzjihzubgrerjezxguyx`) to new (`pizsodtvikocjjpqxwbh`)
+- New PostgreSQL database with Prisma schema (UUID-based Song model)
+- Audio files in new "songs" bucket with UUID filenames
+- Thumbnails in new "images" bucket
+- All songs have new UUIDs (old string IDs discarded)
+
+**Architecture**:
+
+- Frontend uses API by default: `packages/utils/src/getSongs()` fetches from API first
+- API serves songs from new Supabase via NestJS (`apps/api`)
+- Static fallback if API unavailable (`staticSongs` array in `packages/utils/src/songs.ts`)
+- Old Supabase instance retained until 2026-01-30 (30-day grace period)
+
+**Migration Artifacts**:
+
+- Plan: `plans/251231-0800-supabase-songs-migration/`
+- Report: `docs/migrations/2025-12-31-supabase-songs.md`
+- Scripts: `apps/api/scripts/archive/migrate-songs-*.ts` (archived)
+
+**Storage Buckets**:
+
+- Audio files: "songs" bucket (UUID-based filenames, e.g., `5fa8a54b-219c-4b68-bb7e-8f14030f406d.mp3`)
+- Thumbnails: "images" bucket (UUID-based filenames, e.g., `5fa8a54b-219c-4b68-bb7e-8f14030f406d.png`)
+
+**Environment Variables**:
+
+- Removed: `OLD_NEXT_PUBLIC_SUPABASE_URL`, `OLD_NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- Current: `NEXT_PUBLIC_SUPABASE_URL` (new instance), `NEXT_PUBLIC_API_URL`
+
+**Database Schema**:
+
+```prisma
+model Song {
+  id            String   @id @default(uuid())
+  title         String
+  artist        String
+  album         String?
+  duration      Int?
+  filePath      String   // songs/{uuid}.mp3
+  fileSize      Int?
+  thumbnailPath String?  // images/{uuid}.png
+  published     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+```
+
 ## Project Overview
 
 Love Days is a Next.js application with audio player functionality that uses Supabase for audio file storage. Built as a Turborepo monorepo with TypeScript and modern tooling.

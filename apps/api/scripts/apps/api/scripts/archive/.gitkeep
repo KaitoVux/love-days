@@ -1,0 +1,4 @@
+# Migration Scripts Archive
+# Scripts in this directory are archived and may have import path issues
+# They are kept for historical reference only
+# Do not include in TypeScript compilation
