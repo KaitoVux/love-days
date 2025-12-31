@@ -1,14 +1,40 @@
 # Love Days - Project Roadmap
 
-**Last Updated:** 2025-12-29 14:30 UTC
-**Overall Progress:** 60% Complete (3 of 5 major phases done)
-**Status:** Active Development - NestJS Backend Phase 3 Complete, Phase 4 In Progress
+**Last Updated:** 2025-12-31 08:30 UTC
+**Overall Progress:** 62% Complete - Database Migration Complete, Next: Storage & Verification
+**Status:** Active Development - Database Migration Complete, Storage Migration Starting
 
 ---
 
 ## Project Overview
 
 Love Days is a Next.js application with audio player functionality built on Turborepo monorepo structure. Current phase: UI/UX modernization with theme system implementation and App Router migration.
+
+---
+
+## Active Migration Initiative
+
+### Supabase Songs Migration (NEW)
+
+**Plan:** [plans/251231-0800-supabase-songs-migration/plan.md](../plans/251231-0800-supabase-songs-migration/plan.md)
+**Status:** Phase 1-2 Complete (40% overall - 2 of 5 phases done)
+**Goal:** Migrate 16 songs from old Supabase to new instance with database records and UUIDs
+
+#### Phase Status
+
+| Phase | Name                | Status         | Completion       |
+| ----- | ------------------- | -------------- | ---------------- |
+| 1     | Setup & Preparation | ✅ Done        | 2025-12-31 08:00 |
+| 2     | Database Migration  | ✅ Done        | 2025-12-31 08:30 |
+| 3     | Storage Migration   | 🟡 Ready Start | 2025-12-31 (est) |
+| 4     | Verification & Test | 🔴 Pending     | 2026-01-01 (est) |
+| 5     | Frontend Updates    | 🔴 Pending     | 2026-01-02 (est) |
+
+**Key Achievements:**
+
+- Phase 1: Supabase buckets created, migration scripts initialized
+- Phase 2: 16 songs successfully migrated to PostgreSQL with new UUIDs, mapping file generated, all code review issues resolved
+- All critical security and architectural issues fixed prior to execution
 
 ---
 
