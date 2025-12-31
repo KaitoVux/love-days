@@ -1,8 +1,8 @@
 # Love Days Documentation
 
-**Last Updated**: 2025-12-30
-**Status**: Phase 04 Complete - Frontend API Integration Ready
-**Documentation Version**: 1.2
+**Last Updated**: 2025-12-31
+**Status**: Phase 04-05 Complete + Migration Phase 01 Added
+**Documentation Version**: 1.3
 
 ## Quick Navigation
 
@@ -64,6 +64,18 @@ See **[SUPABASE_INTEGRATION.md](./SUPABASE_INTEGRATION.md)** (reference)
 - Data models
 - Troubleshooting
 
+### For Supabase Songs Migration
+
+Check **[MIGRATION_PHASE01_SETUP_PREPARATION.md](./MIGRATION_PHASE01_SETUP_PREPARATION.md)** (comprehensive guide)
+
+- Phase 1: Setup & environment validation
+- Migration script scaffold
+- Dry-run testing
+- Phase 2+ planning
+
+**Quick Start**: [MIGRATION_PHASE01_QUICK_REFERENCE.md](./MIGRATION_PHASE01_QUICK_REFERENCE.md) (5-minute setup)
+**Completion Report**: [MIGRATION_PHASE01_COMPLETION_SUMMARY.md](./MIGRATION_PHASE01_COMPLETION_SUMMARY.md) (detailed status)
+
 ### For Documentation Status
 
 Review **[DOCUMENTATION_SUMMARY.md](./DOCUMENTATION_SUMMARY.md)** (meta)
@@ -79,20 +91,21 @@ Review **[DOCUMENTATION_SUMMARY.md](./DOCUMENTATION_SUMMARY.md)** (meta)
 
 ```
 docs/
-├── README.md                      ← You are here
-├── PROJECT_OVERVIEW.md            ← Start here (all developers)
-├── SYSTEM_ARCHITECTURE.md         ← Deep dive (designers + leads)
-├── CODE_STANDARDS.md              ← Reference (during coding)
-├── UI_THEME_REFACTOR_PHASE01.md   ← Phase 01 (foundation)
-├── UI_THEME_REFACTOR_PHASE02.md   ← Phase 02 (App Router)
-├── UI_THEME_REFACTOR_PHASE04.md   ← Phase 04 (components)
-├── UI_THEME_REFACTOR_PHASE05.md   ← Phase 05 (music player) ✅ CURRENT
-├── PHASE04_QUICK_REFERENCE.md     ← Phase 04 cheat sheet
-├── PHASE04_COMPLETION_REPORT.md   ← Phase 04 details
-├── PHASE05_QUICK_REFERENCE.md     ← Phase 05 cheat sheet
-├── PHASE05_COMPLETION_REPORT.md   ← Phase 05 details
-├── SUPABASE_INTEGRATION.md        ← Reference (storage/backend)
-└── DOCUMENTATION_SUMMARY.md       ← Meta (doc status)
+├── README.md                            ← You are here
+├── PROJECT_OVERVIEW.md                  ← Start here (all developers)
+├── SYSTEM_ARCHITECTURE.md               ← Deep dive (designers + leads)
+├── CODE_STANDARDS.md                    ← Reference (during coding)
+├── UI_THEME_REFACTOR_PHASE01.md         ← Phase 01 (foundation)
+├── UI_THEME_REFACTOR_PHASE02.md         ← Phase 02 (App Router)
+├── UI_THEME_REFACTOR_PHASE04.md         ← Phase 04 (components)
+├── UI_THEME_REFACTOR_PHASE05.md         ← Phase 05 (music player) ✅ CURRENT
+├── PHASE04_QUICK_REFERENCE.md           ← Phase 04 cheat sheet
+├── PHASE04_COMPLETION_REPORT.md         ← Phase 04 details
+├── PHASE05_QUICK_REFERENCE.md           ← Phase 05 cheat sheet
+├── PHASE05_COMPLETION_REPORT.md         ← Phase 05 details
+├── SUPABASE_INTEGRATION.md              ← Reference (storage/backend)
+├── MIGRATION_PHASE01_SETUP_PREPARATION.md ← Migration Phase 01 (NEW)
+└── DOCUMENTATION_SUMMARY.md             ← Meta (doc status)
 ```
 
 ---
@@ -428,6 +441,9 @@ npm run clean
 **Setup Supabase for audio**
 → [SUPABASE_INTEGRATION.md](./SUPABASE_INTEGRATION.md)
 
+**Migrate songs to new Supabase**
+→ [MIGRATION_PHASE01_SETUP_PREPARATION.md](./MIGRATION_PHASE01_SETUP_PREPARATION.md)
+
 **Know documentation status**
 → [DOCUMENTATION_SUMMARY.md](./DOCUMENTATION_SUMMARY.md)
 
@@ -522,18 +538,23 @@ Love Days
 │   ├── CODE_STANDARDS.md
 │   ├── UI_THEME_REFACTOR_PHASE01.md
 │   ├── UI_THEME_REFACTOR_PHASE04.md
-│   ├── UI_THEME_REFACTOR_PHASE05.md (NEW)
-│   ├── PHASE05_QUICK_REFERENCE.md (NEW)
-│   ├── PHASE05_COMPLETION_REPORT.md (NEW)
+│   ├── UI_THEME_REFACTOR_PHASE05.md
+│   ├── PHASE05_QUICK_REFERENCE.md
+│   ├── PHASE05_COMPLETION_REPORT.md
 │   ├── SUPABASE_INTEGRATION.md
+│   ├── MIGRATION_PHASE01_SETUP_PREPARATION.md (NEW)
+│   ├── MIGRATION_PHASE01_QUICK_REFERENCE.md (NEW)
+│   ├── MIGRATION_PHASE01_COMPLETION_SUMMARY.md (NEW)
 │   └── DOCUMENTATION_SUMMARY.md
 │
 ├── Source Code
 │   ├── apps/
 │   │   ├── web/ (Next.js app)
+│   │   ├── api/ (NestJS backend)
 │   │   └── portal/
 │   └── packages/
-│       └── utils/ (shared utilities)
+│       ├── utils/ (shared utilities)
+│       └── types/ (shared types)
 │
 └── Configuration
     ├── turbo.json
@@ -543,6 +564,6 @@ Love Days
 
 ---
 
-**Last Updated**: 2025-12-26
-**Status**: Phase 05 Complete ✅
-**Next Phase**: Phase 06 (Testing & Polish) 📋
+**Last Updated**: 2025-12-31
+**Status**: Phase 05 Complete + Migration Phase 01 Added ✅
+**Current Focus**: Supabase Songs Migration 🔄
