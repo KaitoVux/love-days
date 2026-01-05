@@ -20,7 +20,7 @@
     "format:check": "turbo run format:check",
     "type-check": "turbo run type-check",
     "clean": "turbo run clean",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "dependencies": {
     "dayjs": "^1.11.10",
