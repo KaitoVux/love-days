@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { LogOut, User } from "lucide-react";
-import { useAuth } from "@/components/auth/auth-provider";
+import { createBrowserClient } from "@supabase/ssr";
+import { User as SupabaseUser } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,7 +16,35 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function Header() {
-  const { user, signOut } = useAuth();
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const router = useRouter();
+
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  );
+
+  useEffect(() => {
+    // Get current user
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase.auth]);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  };
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center justify-end gap-4 border-b border-border bg-card/50 px-6 backdrop-blur-sm">
@@ -29,7 +60,7 @@ export function Header() {
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut()}>
+          <DropdownMenuItem onClick={handleSignOut}>
             <LogOut className="mr-2 h-4 w-4" />
             <span>Sign out</span>
           </DropdownMenuItem>
