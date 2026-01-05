@@ -148,7 +148,7 @@ NEXT_PUBLIC_API_URL="https://api.yourdomain.com"
 
 ```json
 {
-  "buildCommand": "cd ../.. && npm run build --filter=@love-days/admin...",
+  "buildCommand": "cd ../.. && npx turbo build --filter=@love-days/admin...",
   "outputDirectory": ".next",
   "installCommand": "npm install --prefix=../.."
 }
@@ -168,7 +168,8 @@ NEXT_PUBLIC_API_URL="https://api.yourdomain.com"
 **Why this works:**
 
 - `installCommand` installs from monorepo root
-- `buildCommand` uses Turbo filter to build `@love-days/admin` AND dependencies (including `@love-days/types`)
+- `buildCommand` uses `npx turbo build --filter=@love-days/admin...` to build ONLY admin + types (not API/web)
+- `...` (triple dot) includes dependencies, preventing unwanted builds
 - `outputDirectory` points to `.next` relative to `apps/admin`
 
 ### 2.4 Custom Domain
@@ -474,8 +475,8 @@ Type error: Cannot find module '@love-days/types' or its corresponding type decl
 **The vercel.json ensures:**
 
 - Dependencies install from monorepo root
-- Turbo builds `@love-days/types` before admin app
-- Build command: `npm run build --filter=@love-days/admin...`
+- Turbo builds ONLY `@love-days/types` + `@love-days/admin` (not API/web)
+- Build command: `npx turbo build --filter=@love-days/admin...`
 
 ### API: "Database connection failed"
 

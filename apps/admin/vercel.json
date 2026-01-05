@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd ../.. && npm run build --filter=@love-days/admin...",
+  "buildCommand": "cd ../.. && npx turbo build --filter=@love-days/admin...",
   "outputDirectory": ".next",
   "installCommand": "npm install --prefix=../.."
 }
