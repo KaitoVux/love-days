@@ -20,13 +20,18 @@ async function bootstrap() {
     }),
   );
 
+  // Configure CORS from environment variable
+  const corsOrigins = process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(',').map((origin) => origin.trim())
+    : [
+        'https://love-days.pages.dev',
+        'https://love-days-admin.vercel.app',
+        'http://localhost:3000',
+        'http://localhost:3001',
+      ];
+
   app.enableCors({
-    origin: [
-      'https://love-days.pages.dev',
-      'https://love-days-admin.vercel.app',
-      'http://localhost:3000',
-      'http://localhost:3001',
-    ],
+    origin: corsOrigins,
     credentials: true,
   });
 
