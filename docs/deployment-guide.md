@@ -142,16 +142,34 @@ NEXT_PUBLIC_API_URL="https://api.yourdomain.com"
 
 ### 2.3 Deploy
 
+**Important:** For Turborepo monorepo with workspace packages, we use `vercel.json` to configure build.
+
+**File: `apps/admin/vercel.json`** (already created)
+
+```json
+{
+  "buildCommand": "cd ../.. && npm run build --filter=@love-days/admin...",
+  "outputDirectory": ".next",
+  "installCommand": "npm install --prefix=../.."
+}
+```
+
 **Vercel Dashboard:**
 
 1. Add New Project
 2. Import: `love-days` repository
 3. Framework Preset: Next.js
-4. Root Directory: `apps/admin`
-5. Build Command: `npm run build`
-6. Output Directory: `.next`
+4. Root Directory: `apps/admin` ⚠️ **Important: Keep this setting**
+5. Build Command: (leave empty - uses vercel.json)
+6. Output Directory: (leave empty - uses vercel.json)
 7. Add environment variables
 8. Deploy
+
+**Why this works:**
+
+- `installCommand` installs from monorepo root
+- `buildCommand` uses Turbo filter to build `@love-days/admin` AND dependencies (including `@love-days/types`)
+- `outputDirectory` points to `.next` relative to `apps/admin`
 
 ### 2.4 Custom Domain
 
@@ -433,6 +451,31 @@ psql $DATABASE_URL < backup-20260105.sql
 ---
 
 ## Troubleshooting
+
+### Admin: "Cannot find module '@love-days/types'"
+
+**Symptom:** Build fails with type error during Vercel deployment.
+
+```
+Type error: Cannot find module '@love-days/types' or its corresponding type declarations.
+```
+
+**Cause:** Vercel building from isolated `apps/admin` directory without building workspace dependencies.
+
+**Fix:**
+
+1. Ensure `apps/admin/vercel.json` exists with correct config (see Phase 2.3)
+2. In Vercel Dashboard → Project Settings → General:
+   - Root Directory: `apps/admin`
+   - Build Command: (leave empty)
+   - Output Directory: (leave empty)
+3. Trigger redeploy
+
+**The vercel.json ensures:**
+
+- Dependencies install from monorepo root
+- Turbo builds `@love-days/types` before admin app
+- Build command: `npm run build --filter=@love-days/admin...`
 
 ### API: "Database connection failed"
 
