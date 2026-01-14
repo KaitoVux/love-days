@@ -147,7 +147,7 @@ const MusicSidebar = ({ songs }: MusicSidebarProps) => {
     if (!iframe?.contentWindow) return;
 
     // Send "listening" event to YouTube to start receiving state updates
-    iframe.contentWindow.postMessage('{"event":"listening"}', "*");
+    iframe.contentWindow.postMessage('{"event":"listening"}', "https://www.youtube.com");
 
     const handleYouTubeMessage = (event: MessageEvent) => {
       // Security: Only accept messages from YouTube
@@ -159,11 +159,15 @@ const MusicSidebar = ({ songs }: MusicSidebarProps) => {
         // YouTube sends "infoDelivery" events with playerState inside info object
         // playerState: 0 = ended, 1 = playing, 2 = paused
         if (data.event === "infoDelivery" && data.info?.playerState === 0) {
-          console.log("Video ended, playing next track");
+          if (process.env.NODE_ENV === "development") {
+            console.log("Video ended, playing next track");
+          }
           handleNextTrack();
         }
       } catch (error) {
-        console.log("Failed to parse YouTube message:", error);
+        if (process.env.NODE_ENV === "development") {
+          console.log("Failed to parse YouTube message:", error);
+        }
       }
     };
 

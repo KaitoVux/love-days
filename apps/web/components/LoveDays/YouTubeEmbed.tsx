@@ -39,6 +39,7 @@ export const YouTubeEmbed = ({ videoId, className }: YouTubeEmbedProps) => {
         src={embedUrl}
         title="YouTube video player"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        sandbox="allow-scripts allow-same-origin allow-presentation allow-popups allow-popups-to-escape-sandbox"
         allowFullScreen
         className="absolute inset-0 w-full h-full border-0"
         loading="lazy"
