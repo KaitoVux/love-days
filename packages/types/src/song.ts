@@ -4,8 +4,18 @@ export interface ISong {
   artist: string;
   album?: string;
   duration?: number; // seconds
-  filePath: string;
+
+  // Source type discriminator
+  sourceType: "youtube" | "upload";
+
+  // YouTube source fields
+  youtubeVideoId?: string;
+
+  // Upload source fields
+  filePath?: string;
   fileSize?: number; // bytes
+
+  // Shared fields
   thumbnailPath?: string;
   createdAt: string;
   updatedAt: string;
@@ -29,6 +39,6 @@ export interface UpdateSongDto {
 }
 
 export interface SongResponseDto extends ISong {
-  fileUrl: string;
+  fileUrl?: string;
   thumbnailUrl?: string;
 }

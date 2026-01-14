@@ -1,22 +1,23 @@
-// Existing interface (for backward compatibility with frontend)
+// Song interface matching API response
 export interface ISong {
-  id: string;
-  name: string;
-  author: string;
-  audio: string;
-  img: string;
-  duration?: string;
-}
-
-// New interface matching API response
-export interface ISongApiResponse {
   id: string;
   title: string;
   artist: string;
   album?: string;
   duration?: number;
-  filePath: string;
+
+  // Source type discriminator
+  sourceType: "youtube" | "upload";
+
+  // YouTube source fields
+  youtubeVideoId?: string;
+
+  // Upload source fields
+  filePath?: string;
   fileUrl?: string;
+  fileSize?: number;
+
+  // Shared fields
   thumbnailPath?: string;
   thumbnailUrl?: string;
   published: boolean;
