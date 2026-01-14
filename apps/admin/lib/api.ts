@@ -77,6 +77,12 @@ export const songsApi = {
         body: JSON.stringify({ fileName, fileType, fileSize }),
       },
     ),
+
+  createFromYoutube: (youtubeUrl: string) =>
+    fetchApi<SongResponseDto>("/api/v1/songs/youtube", {
+      method: "POST",
+      body: JSON.stringify({ youtubeUrl }),
+    }),
 };
 
 // Images API

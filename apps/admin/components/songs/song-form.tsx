@@ -21,7 +21,9 @@ interface SongFormProps {
     title: string;
     artist: string;
     album?: string;
-    filePath: string;
+    filePath?: string;
+    sourceType?: "youtube" | "upload";
+    youtubeVideoId?: string;
     thumbnailPath?: string;
     thumbnailUrl?: string;
   };
@@ -133,6 +135,8 @@ export function SongForm({ mode, initialData }: SongFormProps) {
     }
   };
 
+  const isYouTubeSong = initialData?.sourceType === "youtube";
+
   return (
     <form onSubmit={handleSubmit}>
       <Card>
@@ -142,6 +146,17 @@ export function SongForm({ mode, initialData }: SongFormProps) {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
+          {mode === "edit" && isYouTubeSong && (
+            <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
+              <p className="text-sm text-blue-800">
+                <strong>Source:</strong> YouTube ({initialData?.youtubeVideoId})
+              </p>
+              <p className="text-xs text-blue-600 mt-1">
+                YouTube songs cannot change audio source. Edit metadata only.
+              </p>
+            </div>
+          )}
+
           {mode === "create" && (
             <div className="space-y-2">
               <Label>Audio File *</Label>

@@ -39,8 +39,17 @@ interface ApiSongResponse {
   artist: string;
   album?: string;
   duration?: number;
-  filePath: string;
+
+  // Source type fields
+  sourceType: "youtube" | "upload";
+  youtubeVideoId?: string;
+
+  // Upload fields
+  filePath?: string;
   fileUrl?: string;
+  fileSize?: number;
+
+  // Shared fields
   thumbnailPath?: string;
   thumbnailUrl?: string;
   published: boolean;
@@ -62,16 +71,6 @@ interface ApiImageResponse {
   updatedAt: string;
 }
 
-function getDefaultThumbnail(): string {
-  return "/images/default-album.png";
-}
-
-function formatDuration(seconds: number): string {
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-}
-
 /**
  * Fetch published songs from API (for build-time static generation)
  */
@@ -82,14 +81,23 @@ export async function fetchPublishedSongs(): Promise<ISong[]> {
       { timeout: 15000, fallback: [] }
     );
 
-    // Transform API response to match existing ISong interface
+    // Pass through API response with new format (sourceType, youtubeVideoId, etc.)
     return songs.map(song => ({
       id: song.id,
-      name: song.title,
-      author: song.artist,
-      audio: song.fileUrl || "",
-      img: song.thumbnailUrl || getDefaultThumbnail(),
-      duration: song.duration ? formatDuration(song.duration) : undefined,
+      title: song.title,
+      artist: song.artist,
+      album: song.album,
+      duration: song.duration,
+      sourceType: song.sourceType,
+      youtubeVideoId: song.youtubeVideoId,
+      filePath: song.filePath,
+      fileUrl: song.fileUrl,
+      fileSize: song.fileSize,
+      thumbnailPath: song.thumbnailPath,
+      thumbnailUrl: song.thumbnailUrl,
+      published: song.published,
+      createdAt: song.createdAt,
+      updatedAt: song.updatedAt,
     }));
   } catch (error) {
     console.error("Failed to fetch songs from API:", error);

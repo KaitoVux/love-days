@@ -12,14 +12,22 @@ model Song {
   artist        String   @db.VarChar(255)
   album         String?  @db.VarChar(255)
   duration      Int?
-  filePath      String   @map("file_path") @db.VarChar(500)
+
+  // Existing fields (keep for fallback)
+  filePath      String?  @map("file_path") @db.VarChar(500)
   fileSize      Int?     @map("file_size")
   thumbnailPath String?  @map("thumbnail_path") @db.VarChar(500)
+
+  // NEW: YouTube reference fields
+  youtubeVideoId String?  @map("youtube_video_id") @db.VarChar(20)
+  sourceType     String   @default("upload") @db.VarChar(20) // "youtube" | "upload"
+
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
   published     Boolean  @default(false)
 
   @@index([published])
+  @@index([sourceType])
   @@map("songs")
 }
 
