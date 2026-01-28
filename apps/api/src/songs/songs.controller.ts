@@ -13,7 +13,6 @@ import {
   ApiTags,
   ApiOperation,
   ApiBearerAuth,
-  ApiQuery,
   ApiResponse,
 } from '@nestjs/swagger';
 import { SongsService } from './songs.service';
@@ -21,6 +20,7 @@ import { CreateSongDto } from './dto/create-song.dto';
 import { UpdateSongDto } from './dto/update-song.dto';
 import { SongUploadUrlDto } from './dto/upload-url.dto';
 import { CreateFromYoutubeDto } from './dto/create-from-youtube.dto';
+import { QuerySongsDto } from './dto/query-songs.dto';
 import { UploadUrlResponseDto } from '../storage/dto/upload-url-response.dto';
 import { SupabaseAuthGuard } from '../auth/auth.guard';
 
@@ -42,13 +42,9 @@ export class SongsController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'List all songs' })
-  @ApiQuery({ name: 'published', required: false, type: Boolean })
-  findAll(@Query('published') published?: string) {
-    // Handle query param: 'true' -> true, 'false' -> false, empty/undefined -> undefined (all)
-    const isPublished =
-      published === 'true' ? true : published === 'false' ? false : undefined;
-    return this.songsService.findAll(isPublished);
+  @ApiOperation({ summary: 'List songs with search, filter, and pagination' })
+  findAll(@Query() query: QuerySongsDto) {
+    return this.songsService.findAllPaginated(query);
   }
 
   @Get(':id')

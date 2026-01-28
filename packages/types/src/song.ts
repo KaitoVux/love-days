@@ -42,3 +42,18 @@ export interface SongResponseDto extends ISong {
   fileUrl?: string;
   thumbnailUrl?: string;
 }
+
+// Pagination types (generic, reusable for images etc.)
+export interface PaginationMeta {
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta: PaginationMeta;
+}
+
+export type PaginatedSongsResponse = PaginatedResponse<SongResponseDto>;

@@ -2,9 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { StorageService } from '../storage/storage.service';
 import { YouTubeService } from '../youtube/youtube.service';
+import { Prisma } from '@prisma/client';
 import { CreateSongDto } from './dto/create-song.dto';
 import { UpdateSongDto } from './dto/update-song.dto';
 import { SongUploadUrlDto } from './dto/upload-url.dto';
+import { QuerySongsDto } from './dto/query-songs.dto';
 import { UploadUrlResponseDto } from '../storage/dto/upload-url-response.dto';
 
 const MAX_SONG_SIZE = 50 * 1024 * 1024; // 50MB
@@ -61,8 +63,61 @@ export class SongsService {
       orderBy: { createdAt: 'desc' },
     });
 
-    // Transform to include public URLs
     return songs.map((song) => this.transformSong(song));
+  }
+
+  // Paginated query with search, filter, sorting
+  async findAllPaginated(query: QuerySongsDto): Promise<{
+    data: SongTransformed[];
+    meta: { total: number; page: number; pageSize: number; totalPages: number };
+  }> {
+    const {
+      search,
+      published,
+      sourceType,
+      page = 1,
+      pageSize = 10,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+    } = query;
+
+    const where: Prisma.SongWhereInput = {};
+
+    // Published filter
+    const isPublished =
+      published === 'true' ? true : published === 'false' ? false : undefined;
+    if (isPublished !== undefined) where.published = isPublished;
+
+    // Source type filter
+    if (sourceType) where.sourceType = sourceType;
+
+    // Search across title and artist
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { artist: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    const [songs, total] = await Promise.all([
+      this.prisma.song.findMany({
+        where,
+        orderBy: { [sortBy]: sortOrder },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+      }),
+      this.prisma.song.count({ where }),
+    ]);
+
+    return {
+      data: songs.map((song) => this.transformSong(song)),
+      meta: {
+        total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
+    };
   }
 
   async findOne(id: string): Promise<SongTransformed> {
