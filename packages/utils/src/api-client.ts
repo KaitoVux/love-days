@@ -73,15 +73,17 @@ interface ApiImageResponse {
 
 /**
  * Fetch published songs from API (for build-time static generation)
+ * API returns paginated response: { data: [], meta: {} }
  */
 export async function fetchPublishedSongs(): Promise<ISong[]> {
   try {
-    const songs = await fetchWithTimeout<ApiSongResponse[]>(
-      `${API_URL}/api/v1/songs?published=true`,
-      { timeout: 15000, fallback: [] }
+    const response = await fetchWithTimeout<{ data: ApiSongResponse[]; meta: unknown }>(
+      `${API_URL}/api/v1/songs?published=true&pageSize=100`,
+      { timeout: 15000, fallback: { data: [], meta: {} } }
     );
 
-    // Pass through API response with new format (sourceType, youtubeVideoId, etc.)
+    const songs = response.data ?? [];
+
     return songs.map(song => ({
       id: song.id,
       title: song.title,

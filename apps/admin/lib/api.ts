@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase";
 import type {
   SongResponseDto,
+  PaginatedSongsResponse,
   ImageResponseDto,
   CreateSongDto,
   CreateImageDto,
@@ -9,6 +10,16 @@ import type {
   DeployResponseDto,
   DeployStatusDto,
 } from "@love-days/types";
+
+export interface SongQueryParams {
+  search?: string;
+  published?: string;
+  sourceType?: string;
+  page?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortOrder?: string;
+}
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -43,8 +54,19 @@ async function fetchApi<T>(
 
 // Songs API
 export const songsApi = {
-  list: (published?: boolean) =>
-    fetchApi<SongResponseDto[]>(`/api/v1/songs?published=${published ?? ""}`),
+  list: (params?: SongQueryParams) => {
+    const searchParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== "")
+          searchParams.set(key, String(value));
+      });
+    }
+    const query = searchParams.toString();
+    return fetchApi<PaginatedSongsResponse>(
+      `/api/v1/songs${query ? `?${query}` : ""}`,
+    );
+  },
 
   get: (id: string) => fetchApi<SongResponseDto>(`/api/v1/songs/${id}`),
 
