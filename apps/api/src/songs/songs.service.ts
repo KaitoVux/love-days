@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { StorageService } from '../storage/storage.service';
+import { YouTubeService } from '../youtube/youtube.service';
 import { CreateSongDto } from './dto/create-song.dto';
 import { UpdateSongDto } from './dto/update-song.dto';
 import { SongUploadUrlDto } from './dto/upload-url.dto';
@@ -14,9 +15,17 @@ export interface SongTransformed {
   title: string;
   artist: string;
   album: string | null;
-  filePath: string;
-  fileUrl: string;
-  fileSize: number | null;
+  sourceType: string;
+
+  // YouTube source fields
+  youtubeVideoId?: string;
+
+  // Upload source fields
+  filePath?: string;
+  fileUrl?: string;
+  fileSize?: number | null;
+
+  // Shared fields
   duration: number | null;
   thumbnailPath: string | null;
   thumbnailUrl?: string;
@@ -30,6 +39,7 @@ export class SongsService {
   constructor(
     private prisma: PrismaService,
     private storage: StorageService,
+    private youtubeService: YouTubeService,
   ) {}
 
   // Generate presigned upload URL
@@ -68,6 +78,33 @@ export class SongsService {
     return this.transformSong(song);
   }
 
+  /**
+   * Create song from YouTube URL
+   * Processing time: ~1-2 seconds (vs 30-60s for download)
+   */
+  async createFromYoutube(youtubeUrl: string): Promise<SongTransformed> {
+    // 1. Fetch metadata from YouTube
+    const videoInfo = await this.youtubeService.getVideoInfo(youtubeUrl);
+
+    // 2. Parse artist/title from video title
+    const metadata = this.youtubeService.parseMetadata(videoInfo.title);
+
+    // 3. Create song record
+    const song = await this.prisma.song.create({
+      data: {
+        title: metadata.title,
+        artist: metadata.artist,
+        duration: videoInfo.duration,
+        youtubeVideoId: videoInfo.videoId,
+        thumbnailPath: videoInfo.thumbnailUrl, // Store YouTube URL (not uploaded file)
+        sourceType: 'youtube',
+        published: false,
+      },
+    });
+
+    return this.transformSong(song);
+  }
+
   async update(id: string, dto: UpdateSongDto): Promise<SongTransformed> {
     await this.findOne(id);
     const song = await this.prisma.song.update({
@@ -83,16 +120,18 @@ export class SongsService {
       throw new NotFoundException(`Song with ID ${id} not found`);
     }
 
-    // Delete file from storage
-    try {
-      await this.storage.deleteFile(SONGS_BUCKET, song.filePath);
-    } catch (e) {
-      // Log but don't fail if file deletion fails
-      console.error('Failed to delete song file:', e);
+    // Delete file from storage (only for uploaded songs)
+    if (song.sourceType === 'upload' && song.filePath) {
+      try {
+        await this.storage.deleteFile(SONGS_BUCKET, song.filePath);
+      } catch (e) {
+        // Log but don't fail if file deletion fails
+        console.error('Failed to delete song file:', e);
+      }
     }
 
-    // Delete thumbnail if exists
-    if (song.thumbnailPath) {
+    // Delete thumbnail if exists (only for uploaded songs)
+    if (song.sourceType === 'upload' && song.thumbnailPath) {
       try {
         await this.storage.deleteFile('images', song.thumbnailPath);
       } catch (e) {
@@ -118,20 +157,48 @@ export class SongsService {
     title: string;
     artist: string;
     album: string | null;
-    filePath: string;
+    filePath: string | null;
     fileSize: number | null;
     duration: number | null;
     thumbnailPath: string | null;
+    youtubeVideoId: string | null;
+    sourceType: string;
     published: boolean;
     createdAt: Date;
     updatedAt: Date;
   }): SongTransformed {
+    const isYouTube = song.sourceType === 'youtube';
+
     return {
-      ...song,
-      fileUrl: this.storage.getPublicUrl(SONGS_BUCKET, song.filePath),
-      thumbnailUrl: song.thumbnailPath
-        ? this.storage.getPublicUrl('images', song.thumbnailPath)
-        : undefined,
+      id: song.id,
+      title: song.title,
+      artist: song.artist,
+      album: song.album,
+      duration: song.duration,
+      sourceType: song.sourceType,
+      thumbnailPath: song.thumbnailPath,
+
+      // YouTube: Return video ID for player
+      ...(isYouTube && {
+        youtubeVideoId: song.youtubeVideoId || undefined,
+        thumbnailUrl: song.thumbnailPath || undefined, // Already full URL
+      }),
+
+      // Upload: Return Supabase URLs
+      ...(!isYouTube && {
+        filePath: song.filePath || undefined,
+        fileUrl: song.filePath
+          ? this.storage.getPublicUrl(SONGS_BUCKET, song.filePath)
+          : undefined,
+        fileSize: song.fileSize,
+        thumbnailUrl: song.thumbnailPath
+          ? this.storage.getPublicUrl('images', song.thumbnailPath)
+          : undefined,
+      }),
+
+      published: song.published,
+      createdAt: song.createdAt,
+      updatedAt: song.updatedAt,
     };
   }
 }

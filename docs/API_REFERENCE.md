@@ -1,6 +1,6 @@
 # Love Days API Reference
 
-**Version**: 2.2.0
+**Version**: 2.3.0
 **Base URL**:
 
 - Development: `http://localhost:3001`
@@ -8,8 +8,9 @@
 - Swagger Docs: `/api/docs`
 
 **Status**: Phase 05 - Cloudflare Deploy Integration (ACTIVE)
+**Latest Update**: Phase 3 - Admin UI YouTube Import (2026-01-07)
 
-**NOTE**: This API is now integrated with the Next.js frontend via build-time data fetching. See [PHASE04_FRONTEND_INTEGRATION.md](PHASE04_FRONTEND_INTEGRATION.md) for integration details.
+**NOTE**: This API is now integrated with the Next.js frontend via build-time data fetching. See [PHASE04_FRONTEND_INTEGRATION.md](PHASE04_FRONTEND_INTEGRATION.md) for integration details. Admin dashboard supports YouTube song imports via `/api/v1/songs/youtube` endpoint.
 
 ---
 
@@ -371,6 +372,173 @@ curl -X POST http://localhost:3001/api/v1/songs \
     "fileSize": 5242880
   }'
 ```
+
+---
+
+### Create Song from YouTube
+
+Import a song directly from YouTube with automatic metadata extraction (admin only).
+
+**Endpoint**: `POST /api/v1/songs/youtube`
+
+**Authentication**: Required (Bearer token)
+
+**Request Headers**:
+
+```
+Authorization: Bearer <jwt-token>
+Content-Type: application/json
+```
+
+**Request Body**:
+
+| Field      | Type   | Required | Description             |
+| ---------- | ------ | -------- | ----------------------- |
+| youtubeUrl | string | Yes      | YouTube URL or video ID |
+
+**Supported URL Formats**:
+
+- `https://www.youtube.com/watch?v=ID` - Full URL with query params
+- `https://youtu.be/ID` - Shortened URL
+- `ID` - Video ID only (e.g., `dQw4w9WgXcQ`)
+
+**Response**: 201 Created
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "title": "Never Gonna Give You Up",
+  "artist": "Rick Astley",
+  "album": "Whenever You Need Somebody",
+  "duration": 213,
+  "sourceType": "youtube",
+  "youtubeVideoId": "dQw4w9WgXcQ",
+  "filePath": "songs/youtube/dQw4w9WgXcQ",
+  "fileSize": null,
+  "thumbnailPath": "images/550e8400-e29b-41d4-a716-446655440000.png",
+  "fileUrl": null,
+  "thumbnailUrl": "https://[project].supabase.co/storage/v1/object/public/images/550e8400-e29b-41d4-a716-446655440000.png",
+  "createdAt": "2026-01-07T12:30:00.000Z",
+  "updatedAt": "2026-01-07T12:30:00.000Z",
+  "published": false
+}
+```
+
+**Response Fields**:
+
+| Field          | Type          | Description                             |
+| -------------- | ------------- | --------------------------------------- |
+| id             | string (UUID) | Generated song ID                       |
+| sourceType     | string        | Always `"youtube"` for this endpoint    |
+| youtubeVideoId | string        | Extracted YouTube video ID              |
+| filePath       | string        | Virtual path: `songs/youtube/{videoId}` |
+| thumbnailPath  | string        | Auto-extracted YouTube thumbnail        |
+| duration       | number        | Video duration in seconds               |
+| title          | string        | Auto-extracted from YouTube metadata    |
+| artist         | string        | Auto-extracted from YouTube channel     |
+
+**Error Responses**:
+
+400 Bad Request (Invalid URL format)
+
+```json
+{
+  "statusCode": 400,
+  "message": "Invalid YouTube URL format"
+}
+```
+
+400 Bad Request (Video not found)
+
+```json
+{
+  "statusCode": 400,
+  "message": "Video not found or is private"
+}
+```
+
+400 Bad Request (Video not embeddable)
+
+```json
+{
+  "statusCode": 400,
+  "message": "Video not allowed to be played embedded"
+}
+```
+
+401 Unauthorized
+
+```json
+{
+  "statusCode": 401,
+  "message": "Unauthorized"
+}
+```
+
+500 Internal Server Error
+
+```json
+{
+  "statusCode": 500,
+  "message": "Failed to fetch YouTube metadata: details"
+}
+```
+
+**Important Notes**:
+
+1. **Metadata Extraction**: Backend automatically extracts title, artist (channel), duration, and thumbnail
+2. **Source Immutable**: Once imported, YouTube source cannot be changed (by design for data integrity)
+3. **Metadata Editable**: Title, artist, album can be updated via PATCH endpoint
+4. **Thumbnail Replaceable**: Default YouTube thumbnail can be replaced via thumbnail upload
+5. **Public Videos Only**: Private, deleted, or age-restricted videos will fail
+6. **Playback**: Frontend detects `sourceType: "youtube"` and uses YouTube IFrame API instead of HTML5 audio
+
+**Metadata Handling**:
+
+The backend performs the following automatic actions:
+
+- Extracts video title → Song title
+- Extracts channel name → Artist name
+- Extracts video duration → Duration field
+- Downloads video thumbnail → Stores in Supabase images bucket
+- Generates UUID filePath with `songs/youtube/` prefix
+- Sets `sourceType: "youtube"` for source tracking
+
+**Example Request**:
+
+```bash
+# Using full URL
+curl -X POST http://localhost:3001/api/v1/songs/youtube \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  }'
+
+# Using shortened URL
+curl -X POST http://localhost:3001/api/v1/songs/youtube \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "youtubeUrl": "https://youtu.be/dQw4w9WgXcQ"
+  }'
+
+# Using video ID only
+curl -X POST http://localhost:3001/api/v1/songs/youtube \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "youtubeUrl": "dQw4w9WgXcQ"
+  }'
+```
+
+**Post-Import Workflow**:
+
+1. Song created with `published: false` (draft status)
+2. Admin can edit title, artist, album via PATCH endpoint
+3. Admin can replace thumbnail via PATCH endpoint
+4. Admin publishes via POST `/api/v1/songs/:id/publish`
+5. Frontend displays with YouTube IFrame player for playback
 
 ---
 

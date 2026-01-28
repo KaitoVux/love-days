@@ -20,6 +20,8 @@ out/
 *.pem
 .idea
 .claude/
+plans/
+repomix-output.xml
 
 
 # debug

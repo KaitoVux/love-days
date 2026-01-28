@@ -20,6 +20,7 @@ import { SongsService } from './songs.service';
 import { CreateSongDto } from './dto/create-song.dto';
 import { UpdateSongDto } from './dto/update-song.dto';
 import { SongUploadUrlDto } from './dto/upload-url.dto';
+import { CreateFromYoutubeDto } from './dto/create-from-youtube.dto';
 import { UploadUrlResponseDto } from '../storage/dto/upload-url-response.dto';
 import { SupabaseAuthGuard } from '../auth/auth.guard';
 
@@ -54,6 +55,17 @@ export class SongsController {
   @ApiOperation({ summary: 'Get song by ID' })
   findOne(@Param('id') id: string) {
     return this.songsService.findOne(id);
+  }
+
+  @Post('youtube')
+  @UseGuards(SupabaseAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create song from YouTube video' })
+  @ApiResponse({ status: 201, description: 'Song created from YouTube video' })
+  @ApiResponse({ status: 400, description: 'Invalid YouTube URL' })
+  @ApiResponse({ status: 404, description: 'Video not found' })
+  async createFromYoutube(@Body() dto: CreateFromYoutubeDto) {
+    return this.songsService.createFromYoutube(dto.youtubeUrl);
   }
 
   @Post()
