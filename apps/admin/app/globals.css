@@ -30,6 +30,9 @@
     --input: 350 20% 20%;
     --ring: 350 80% 65%;
 
+    --popover: 350 20% 12%;
+    --popover-foreground: 350 20% 95%;
+
     --radius: 0.5rem;
   }
 }
