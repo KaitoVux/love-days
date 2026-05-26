@@ -12,16 +12,20 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase Database
+      - name: Write to Supabase keep_alive table
         run: |
           response=$(curl -s -o /dev/null -w "%{http_code}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/songs?select=id&limit=1" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/keep_alive" \
+            -X POST \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Content-Type: application/json" \
+            -H "Prefer: resolution=merge-duplicates" \
+            -d '{"id":"singleton","pinged_at":"'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'"}')
 
-          if [ "$response" -eq 200 ]; then
-            echo "✓ Supabase ping successful (HTTP $response)"
+          if [ "$response" -eq 200 ] || [ "$response" -eq 201 ]; then
+            echo "✓ Supabase keepalive write successful (HTTP $response)"
           else
-            echo "✗ Supabase ping failed (HTTP $response)"
+            echo "✗ Supabase keepalive write failed (HTTP $response)"
             exit 1
           fi
