@@ -50,3 +50,8 @@ next-env.d.ts
 .turbo
 
 dist
+
+.agents
+.codex
+docs
+.ai-devkit.json
