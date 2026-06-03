@@ -46,7 +46,7 @@ const ProfileSection = () => {
           <div className="w-full h-full rounded-full bg-card overflow-hidden">
             <Image
               src={MiuLem}
-              alt="Mỉu Lem"
+              alt="Mỉu Nem"
               className="w-full h-full object-cover"
               width={144}
               height={144}
@@ -54,7 +54,7 @@ const ProfileSection = () => {
           </div>
         </div>
         <h3 className="mt-2 font-display text-lg md:text-xl lg:text-2xl font-semibold text-foreground">
-          Mỉu Lem
+          Mỉu Nem
         </h3>
         <p className="text-xs md:text-sm text-muted-foreground font-body">Forever mine</p>
       </div>
