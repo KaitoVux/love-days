@@ -31,6 +31,13 @@ model Song {
   @@map("songs")
 }
 
+model KeepAlive {
+  id       String   @id @default("singleton")
+  pingedAt DateTime @default(now()) @map("pinged_at")
+
+  @@map("keep_alive")
+}
+
 model Image {
   id          String   @id @default(uuid())
   title       String   @db.VarChar(255)

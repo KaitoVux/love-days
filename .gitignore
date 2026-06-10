@@ -23,6 +23,12 @@ out/
 plans/
 repomix-output.xml
 
+# ai devkit tooling
+.agents/
+.codex/
+.ai-devkit.json
+docs/ai/
+
 
 # debug
 npm-debug.log*
